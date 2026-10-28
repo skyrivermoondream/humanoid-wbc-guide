@@ -420,6 +420,13 @@ JS = r"""
     out.textContent = tag ? L.out.replace('{list}', hits.join(L.sep)) : '';
   }));
 
+  // arriving with #section (e.g. from the language switch): jump there at once
+  if (location.hash.length > 1) {
+    const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const root = document.documentElement;
+    if (el) { root.style.scrollBehavior = 'auto'; el.scrollIntoView(); requestAnimationFrame(() => { root.style.scrollBehavior = ''; }); }
+  }
+
   // highlight the current stop in the top bar
   const links = $$('.nav a');
   if ('IntersectionObserver' in window) {
