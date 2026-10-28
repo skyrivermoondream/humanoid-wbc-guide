@@ -22,4 +22,6 @@ python3 src/build.py
 
 会重新生成 `index.html`。只需要 Python 3，无需安装其他依赖。
 
+网站目前从 `gh-pages` 分支发布。改完提交到 `main` 后，再运行 `git push origin main:gh-pages` 同步一下；也可以在仓库 Settings → Pages 里把发布分支改成 `main`，以后只推 `main` 就行。
+
 ONE-G（万机）整理，信息截至 2026 年 10 月。
