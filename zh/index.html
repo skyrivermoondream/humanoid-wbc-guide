@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人形机器人全身运控：研究生课题地图</title>
+<meta name="description" content="13 个人形全身运控前沿工作的真机视频与通俗讲解，对照巡检场景给出 6 个可选研究生课题。ONE-G（万机）整理。">
+<meta property="og:title" content="人形机器人全身运控：研究生课题地图">
+<meta property="og:description" content="13 个前沿工作、巡检场景需求、6 个可选课题和第一个月上手路线。">
+<meta property="og:locale" content="zh_CN">
+<link rel="canonical" href="https://skyrivermoondream.github.io/humanoid-wbc-guide/zh/">
+<link rel="alternate" hreflang="en" href="https://skyrivermoondream.github.io/humanoid-wbc-guide/">
+<link rel="alternate" hreflang="zh-CN" href="https://skyrivermoondream.github.io/humanoid-wbc-guide/zh/">
+<link rel="alternate" hreflang="x-default" href="https://skyrivermoondream.github.io/humanoid-wbc-guide/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23245BDF'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --font:"PingFang SC","HarmonyOS Sans SC","MiSans","Microsoft YaHei UI","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",-apple-system,system-ui,sans-serif;--lh:1.75;--hls:0.01em;
+  --bg:#F7F9FC;--surface:#FFFFFF;--surface-2:#F0F4F9;
+  --ink:#151B24;--ink-2:#354153;--muted:#5D6A7C;--line:#DFE5EC;--line-strong:#B6C1CF;
+  --blue:#245BDF;--blue-ink:#23498C;--blue-pale:#EDF3FF;--blue-soft:#BCCFF3;--on-blue:#FFFFFF;
+  --teal:#287F85;--teal-ink:#1D5E62;--teal-pale:#E4F2F2;--on-teal:#FFFFFF;
+  --screen:#0E1726;
+  --wall:#EEF2F7;--seam:#DDE4ED;--ceiling:#5A6677;--tray:#A3AFBD;--floor:#DCE3EB;--floor-edge:#3A4657;--lane:#C2CEDE;
+  --steel:#98A4B3;--steel-dark:#69768A;--steel-light:#C7D0DB;--pipe:#8592A3;
+  --cab:#C5CED9;--cab-door:#D8DFE8;--water:#CCDEF2;
+  --robot:#25334A;--robot-far:#A1ADBD;--visor:#6FD0D3;--pack:#245BDF;--pack-led:#CFF3F3;
+  --warn:#EFB13C;--needle:#E0533D;--led-g:#2FB27A;--led-r:#E0533D;
+  --din:"DIN Alternate","Bahnschrift","Barlow Semi Condensed","Roboto Condensed","sans-serif-condensed","Arial Narrow",var(--font);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12151A;--surface:#191C22;--surface-2:#20252D;
+  --ink:#E8EDF4;--ink-2:#C5CEDA;--muted:#A0ABBA;--line:#2E3642;--line-strong:#4B5667;
+  --blue:#8AB2FF;--blue-ink:#D0DFFF;--blue-pale:#1E2A3E;--blue-soft:#435D88;--on-blue:#0B1426;
+  --teal:#70C3C5;--teal-ink:#C3EBEC;--teal-pale:#17302F;--on-teal:#08201F;
+  --screen:#0A0E14;
+  --wall:#1A1F27;--seam:#252C36;--ceiling:#3B4553;--tray:#4C5767;--floor:#21272F;--floor-edge:#7B8799;--lane:#34404F;
+  --steel:#5C6878;--steel-dark:#8692A3;--steel-light:#36404C;--pipe:#515D6C;
+  --cab:#2A323D;--cab-door:#333C48;--water:#294462;
+  --robot:#D2DAE5;--robot-far:#5A6677;--visor:#3AA7AC;--pack:#6E9BFF;--pack-led:#E8F7F7;
+  --warn:#E3A537;--needle:#FF7A62;
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:68px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/var(--lh) var(--font);-webkit-text-size-adjust:100%;overflow-x:clip}
+a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{line-height:1.25;margin:0;font-weight:750;letter-spacing:var(--hls)}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+@media (max-width:600px){.wrap{padding:0 16px}}
+
+/* top bar: a route line with one stop per section */
+.bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.brand{font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand span{font-family:var(--din);color:var(--muted);font-weight:600;margin-left:6px}
+.nav{margin-left:auto;display:flex;align-self:stretch}
+.nav a{position:relative;display:flex;align-items:center;padding:0 11px 2px;color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
+.nav a::after{content:"";position:absolute;left:50%;bottom:-5px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line-strong)}
+.nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--ink);font-weight:600}
+.nav a.on::after{background:var(--blue);border-color:var(--blue)}
+.lang{display:inline-flex;flex:none;border:1px solid var(--blue-soft);border-radius:7px;overflow:hidden;background:var(--blue-pale);font-size:13px;line-height:1}
+.lang a,.lang span{display:block;padding:6px 9px;text-decoration:none;color:var(--blue-ink)}
+.lang span{background:var(--blue);color:var(--on-blue);font-weight:600}
+.lang a:hover{background:var(--surface)}
+@media (max-width:720px){.brand span{display:none}.bar .wrap{gap:10px}.nav a{padding:0 8px 2px}}
+@media (max-width:600px){.brand{display:none}.nav{margin-left:0;flex:1;justify-content:space-between}.nav a{padding:0 4px 2px;font-size:13.5px}.lang a,.lang span{padding:6px 8px}}
+@media (max-width:380px){.nav a{padding:0 2px 2px;font-size:13px}.lang a,.lang span{padding:6px 7px}}
+
+/* hero */
+.hero{padding-top:48px;padding-bottom:8px}
+.hero-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:end}
+.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.12}
+.nw{white-space:nowrap}
+.hero h1 small{display:block;font-size:.5em;font-weight:600;color:var(--ink-2);margin-top:10px;letter-spacing:0}
+.lede{margin-top:18px;font-size:17px;color:var(--ink-2);max-width:34em}
+.spec{background:var(--blue-pale);padding:18px 22px;border-radius:12px}
+.spec p{font-size:17px;line-height:1.65}
+.spec b{color:var(--blue-ink)}
+.spec .meta{margin-top:10px;font-size:13px;color:var(--muted)}
+@media (max-width:860px){.hero-top{grid-template-columns:1fr;gap:20px}}
+.scene-box{margin-top:28px;border:1px solid var(--line);border-radius:14px;background:var(--wall);overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.scene{display:block;width:100%;min-width:760px;height:auto}
+.swipe{display:none;font-size:13px;color:var(--muted);margin-top:6px}
+@media (max-width:760px){.swipe{display:block}}
+.legend{list-style:none;padding:0;margin:16px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 20px}
+.legend a{display:flex;gap:10px;align-items:center;color:var(--ink);text-decoration:none;padding:4px 0;font-size:15px;line-height:1.35}
+.legend a:hover span:last-child{text-decoration:underline}
+@media (max-width:760px){.legend{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.legend{grid-template-columns:1fr}}
+.pin{flex:none;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--teal);color:var(--on-teal);font:700 14px/1 var(--din)}
+
+/* scene artwork */
+.sc-wall{fill:var(--wall)}.sc-seam{stroke:var(--seam);stroke-width:1.5}
+.sc-ceiling{fill:var(--ceiling)}.sc-tray{fill:none;stroke:var(--tray);stroke-width:2.5}.sc-tray-rib{stroke:var(--tray);stroke-width:2}
+.sc-floor{fill:var(--floor)}.sc-floor-edge{stroke:var(--floor-edge);stroke-width:2}.sc-lane{stroke:var(--lane);stroke-width:3;stroke-dasharray:22 14}
+.sc-water{fill:var(--water)}.sc-water-glint{stroke:#fff;stroke-width:2.5;stroke-linecap:round;opacity:.85}
+.sc-step{fill:var(--steel-light);stroke:var(--steel-dark);stroke-width:1.5}.sc-grate{stroke:var(--steel-dark);stroke-width:2}.sc-step-edge{stroke:var(--warn);stroke-width:3}
+.sc-hanger{stroke:var(--steel-dark);stroke-width:4}.sc-pipe{fill:var(--pipe)}.sc-pipe-0{fill:var(--steel)}.sc-pipe-2{fill:var(--steel-dark)}.sc-clamp{fill:var(--steel-dark)}
+.sc-hazard rect{fill:var(--warn)}.sc-hazard-stripe{stroke:#1B2230;stroke-width:3}
+.sc-gauge-ring{fill:var(--steel-dark)}.sc-gauge-face{fill:#F7F9FB}.sc-needle{stroke:var(--needle);stroke-width:3;stroke-linecap:round}.sc-gauge-arc{fill:none;stroke:#287F85;stroke-width:3}
+.sc-cabinet{fill:var(--cab);stroke:var(--floor-edge);stroke-width:1.5}.sc-door{fill:var(--cab-door);stroke:var(--steel-dark);stroke-width:1.5}.sc-handle{fill:var(--robot)}
+.sc-led-g{fill:var(--led-g)}.sc-led-y{fill:var(--warn)}.sc-led-o{fill:var(--led-r)}
+.sc-warn{fill:var(--warn);stroke:#1B2230;stroke-width:2;stroke-linejoin:round}.sc-warn-bolt{fill:none;stroke:#1B2230;stroke-width:2;stroke-linejoin:round}
+.sc-vent{stroke:var(--steel-dark);stroke-width:2;opacity:.5}
+.sc-booth-box{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.5}.sc-screen{fill:var(--screen)}.sc-screen-line{fill:none;stroke:#70C3C5;stroke-width:2.5;stroke-linejoin:round}
+.sc-op{fill:none;stroke:var(--ink-2);stroke-width:2.5}.sc-vr{fill:var(--teal)}.sc-signal{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linecap:round}
+.sc-link{fill:none;stroke:var(--blue);stroke-width:2;stroke-dasharray:6 7;stroke-linecap:round;opacity:.8}
+.sc-sight{stroke:var(--teal);stroke-width:2;stroke-dasharray:4 6}
+.sc-leader{stroke:var(--ink-2);stroke-width:1.4}
+.rb-near{stroke:var(--robot)}.rb-near-fill{fill:var(--robot)}.rb-far{stroke:var(--robot-far)}.rb-far-fill{fill:var(--robot-far)}
+.rb-body{fill:var(--robot)}.rb-trim{stroke:var(--visor)}.rb-visor{fill:var(--visor)}.rb-pack{fill:var(--pack)}
+.rb-pack-line{fill:#fff;opacity:.35}.rb-led{fill:var(--pack-led)}.rb-ant{stroke:var(--pack)}
+@media (prefers-color-scheme:dark){.sc-water-glint{opacity:.3}}
+.hero-route{fill:none;stroke:var(--teal);stroke-width:6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0}
+.sc-mark{cursor:pointer}
+.sc-mark circle{fill:var(--teal);stroke:var(--wall);stroke-width:4;transition:transform .15s}
+.sc-mark text{font:700 18px var(--din);fill:var(--on-teal);text-anchor:middle;pointer-events:none}
+.sc-mark circle,.sc-mark{transform-box:fill-box;transform-origin:center}
+.sc-mark:hover circle,.sc-mark:focus-visible circle{transform:scale(1.15)}
+@media (prefers-reduced-motion:no-preference){
+  .hero-route{stroke-dashoffset:1;animation:walk 1.9s .25s cubic-bezier(.55,0,.25,1) forwards}
+  .hero .sc-mark{animation:pop .5s calc(.55s + var(--i) * .2s) both}
+}
+@keyframes walk{to{stroke-dashoffset:0}}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.5)}to{opacity:1;transform:none}}
+
+/* sections */
+.station{padding-top:76px;padding-bottom:8px}
+.st-head{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:center;margin-bottom:28px}
+.st-no{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--blue);color:var(--on-blue);font:700 22px/1 var(--din)}
+.st-no::before{content:"";position:absolute;right:100%;top:50%;margin-top:-1px;width:100vw;height:2px;background:var(--blue-soft);z-index:-1}
+.st-head h2{font-size:clamp(25px,3.3vw,33px)}
+.st-head p{grid-column:2;color:var(--muted);font-size:16px;max-width:44em}
+@media (max-width:600px){.st-no{width:40px;height:40px;font-size:19px}.st-head p{grid-column:1 / -1}}
+.sub-h{font-size:21px;margin:52px 0 6px}
+.sub-p{color:var(--muted);max-width:46em;margin-bottom:22px}
+
+/* pipeline */
+.pipe{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;position:relative}
+.pipe::before{content:"";position:absolute;left:32px;right:32px;top:32px;height:2px;background:var(--line-strong)}
+.stage{position:relative;display:flex;flex-direction:column;align-items:flex-start}
+.stage .ic{position:relative;display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:var(--surface);border:1.5px solid var(--blue-soft)}
+.stage .ic .n{position:absolute;top:-5px;left:-5px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:var(--on-blue);font:700 12px/1 var(--din)}
+.ico{width:36px;height:36px;stroke:var(--ink-2);stroke-width:2.3}
+.ico .i-dot{fill:var(--blue);stroke:none}.ico .i-thin{stroke-width:1.5;opacity:.6}.ico .i-dash{stroke-dasharray:3 3}
+.stage h3{font-size:17px;margin-top:14px}
+.stage .alias{font-size:13px;color:var(--blue-ink);background:var(--blue-pale);padding:1px 8px;border-radius:4px;margin-top:5px;line-height:1.6}
+.stage p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.wk{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--din);padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:var(--surface)}
+.wk::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--line-strong)}
+.wk[data-g=onegs]::before{background:var(--blue)}
+.wk:hover{border-color:var(--blue-soft);color:var(--blue-ink)}
+@media (max-width:1000px){.pipe{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:36px}.pipe::before{display:none}}
+@media (max-width:620px){.pipe{grid-template-columns:1fr;row-gap:24px}
+  .pipe::before{display:block;left:31px;right:auto;top:32px;bottom:32px;width:2px;height:auto}
+  .stage{display:grid;grid-template-columns:64px 1fr;gap:0 16px;align-items:start}.stage .ic{grid-row:span 4}.stage h3{margin-top:2px}.stage .alias{justify-self:start}}
+
+/* the three lines ONE-G builds on */
+.trio{display:grid;grid-template-columns:1fr 36px 1.15fr 36px 1fr;align-items:stretch}
+.leg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px 20px;display:flex;flex-direction:column}
+.leg.core{border:1.5px solid var(--blue)}
+.leg .role{font-size:13px;color:var(--muted)}
+.leg h3{font:700 24px/1.2 var(--din);margin:2px 0 4px}
+.leg p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
+.leg .chips{margin-top:auto;padding-top:12px}
+.leg svg{display:block;width:100%;height:auto;margin:12px 0 4px}
+.arrow{display:grid;place-items:center;color:var(--line-strong)}
+.arrow svg{width:28px;height:28px}
+.gpu-cell{fill:var(--line-strong)}.gpu-one{fill:var(--blue)}
+.dia-t{font:600 13px var(--din);fill:var(--muted)}.dia-t.ink{fill:var(--ink)}
+.lora{fill:var(--blue-pale);stroke:var(--blue-soft);stroke-width:1.5}.lora-t{font:700 12.5px var(--din);fill:var(--blue-ink)}
+.dia-arrow{fill:none;stroke:var(--ink-2);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.in-chip{fill:var(--surface-2);stroke:var(--line)}
+.trio-note{margin-top:18px;padding:14px 18px;background:var(--blue-pale);border-radius:10px;color:var(--ink);max-width:58em}
+@media (max-width:900px){.trio{grid-template-columns:1fr}.arrow{height:36px}.arrow svg{transform:rotate(90deg)}}
+
+/* works */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.filter{font:inherit;font-size:14px;line-height:1.3;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+.filter .c{font-family:var(--din);color:var(--muted)}
+.filter:hover{border-color:var(--blue-soft)}
+.filter[aria-pressed=true]{background:var(--blue);color:var(--on-blue);border-color:var(--blue)}
+.filter[aria-pressed=true] .c{color:inherit;opacity:.75}
+.works{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+@media (max-width:900px){.works{grid-template-columns:1fr}}
+.work{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;scroll-margin-top:76px}
+.work[hidden]{display:none}
+.work[data-g=onegs]{border-color:var(--blue-soft)}
+.plate{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:14px 16px 4px}
+.work[data-g=onegs] .plate{background:var(--blue-pale);padding-bottom:12px}
+.plate h3{font:700 25px/1.15 var(--din)}
+.plate h3 small{font-size:14px;font-weight:600;color:var(--muted);margin-left:8px}
+.plate .venue{margin-left:auto;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);background:var(--surface);white-space:nowrap}
+.org{padding:8px 16px 0;font-size:13.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.follow{font-size:12px;font-weight:600;color:var(--on-blue);background:var(--blue);padding:2px 9px;border-radius:999px}
+.media{margin:12px 16px 0}
+.screen{position:relative;aspect-ratio:16/9;background:var(--screen);border-radius:10px;overflow:hidden}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--screen)}
+.play{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;display:flex;align-items:center;gap:9px;padding:9px 17px 9px 10px;border-radius:999px;border:0;background:var(--blue);color:var(--on-blue);font:inherit;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgb(0 0 0 / .28)}
+.play svg{width:24px;height:24px}
+.play .pc{fill:var(--on-blue)}.play .pt{fill:var(--blue)}
+.play:hover{transform:scale(1.04)}
+.media.is-playing .play{display:none}
+.fail{position:absolute;inset:0;display:none;place-content:center;text-align:center;padding:16px;color:#E8EDF4;font-size:14px;gap:8px}
+.fail a{color:#8AB2FF}
+.media.is-error .fail{display:grid}.media.is-error .play,.media.is-error video{display:none}
+.clips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.clip{font:inherit;font-size:13px;line-height:1.4;white-space:nowrap;cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+.clip:hover{border-color:var(--blue-soft)}
+.clip[aria-selected=true]{background:var(--blue);border-color:var(--blue);color:var(--on-blue)}
+.media figcaption{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.media figcaption a{color:inherit}
+.body{padding:14px 16px 18px}
+.body .one{font-size:15.5px}
+.explain{margin:12px 0 0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 14px;font-size:14.5px}
+.explain dt{font-weight:700;color:var(--muted)}
+.explain dd{margin:0;color:var(--ink-2)}
+.explain dt.ins{color:var(--teal)}
+@media (max-width:440px){.explain{grid-template-columns:1fr;gap:0}.explain dd{margin-bottom:8px}}
+.nums{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.nums li{font:600 13px/1.2 var(--din);padding:5px 9px;background:var(--surface-2);color:var(--ink-2);border-radius:6px}
+.links{margin-top:14px;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:14px}
+.work.flash{animation:flash 1.4s ease-out}
+@keyframes flash{0%,30%{box-shadow:0 0 0 4px var(--blue-soft)}100%{box-shadow:0 0 0 0 transparent}}
+.stack{position:absolute;inset:0;display:grid;align-content:center;gap:8px;padding:18px 22px}
+.stack div{border:1px solid #4B5667;color:#E8EDF4;border-radius:8px;padding:8px 12px;font-size:14px;display:flex;justify-content:space-between;gap:10px}
+.stack div b{font-family:var(--din)}
+.stack div:nth-child(2){border-color:#8AB2FF}
+.stack .cmd{border-style:dashed;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#9FE0E2}
+
+/* needs */
+.needs{border-top:1px solid var(--line)}
+.need{display:grid;grid-template-columns:200px minmax(0,1fr) minmax(0,.95fr);gap:22px;padding:22px 0;border-bottom:1px solid var(--line);scroll-margin-top:76px}
+.need .thumb{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--wall);aspect-ratio:4/3}
+.need .thumb svg{display:block;width:100%;height:100%}
+.need .thumb .pin{position:absolute;left:8px;top:8px}
+.need h3{font-size:19px}
+.need .desc{color:var(--ink-2);margin-top:6px;font-size:15px}
+.need dl{margin:0;display:grid;gap:10px;font-size:14.5px}
+.need dt{font-size:13px;color:var(--muted);font-weight:700}
+.need dd{margin:2px 0 0}
+.tp{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--teal-ink);text-decoration:none;padding:4px 10px 4px 4px;border-radius:6px;background:var(--teal-pale);line-height:1.35}
+.tp b{flex:none;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:4px;background:var(--teal);color:var(--on-teal);font:700 12px/1 var(--din)}
+.tp:hover{text-decoration:underline}
+.need-split{margin:34px 0 0;padding-bottom:4px;font-size:15px;font-weight:700;color:var(--muted)}
+@media (max-width:900px){.need{grid-template-columns:150px minmax(0,1fr)}.need dl{grid-column:1 / -1}}
+@media (max-width:520px){.need{grid-template-columns:1fr}.need .thumb{max-width:260px}}
+
+/* topics */
+.chooser{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:22px}
+.chooser p{font-weight:600}
+.choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.choice{font:inherit;font-size:14.5px;line-height:1.3;cursor:pointer;padding:8px 15px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+.choice:hover{border-color:var(--teal)}
+.choice[aria-pressed=true]{background:var(--teal);color:var(--on-teal);border-color:var(--teal);font-weight:600}
+#choice-out{margin-top:10px;font-size:14.5px;color:var(--ink-2);min-height:1.5em;font-weight:400}
+.topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+@media (max-width:900px){.topics{grid-template-columns:1fr}}
+.topic{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 0 18px;transition:opacity .2s;scroll-margin-top:76px}
+.topic.dim{opacity:.35}
+.t-head{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;padding:16px 18px 14px;border-bottom:1px solid var(--line)}
+.t-letter{grid-row:span 2;display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:var(--teal);color:var(--on-teal);font:700 22px/1 var(--din)}
+.t-head h3{font-size:18.5px}
+.t-head .sub{font-size:13.5px;color:var(--muted);grid-column:2;line-height:1.45}
+.lvl{grid-row:span 2;text-align:right;font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.lvl i{display:flex;gap:3px;justify-content:flex-end;margin-bottom:4px}
+.lvl i span{width:14px;height:6px;border-radius:3px;background:var(--line)}
+.lvl i span.on{background:var(--teal)}
+.t-body{padding:14px 18px 0}
+.t-body .one{font-size:15.5px}
+.t-body dl{margin:12px 0 0;display:grid;gap:12px;font-size:14.5px}
+.t-body dt{font-size:13px;color:var(--muted);font-weight:700}
+.t-body dd{margin:3px 0 0;color:var(--ink-2)}
+.t-body ol{margin:4px 0 0;padding-left:1.4em}
+.t-body li{margin:2px 0}
+.fit{font-size:13px;color:var(--muted);margin-top:6px}
+.onegs-note{margin-top:20px;font-size:14.5px;color:var(--muted)}
+@media (max-width:440px){.t-head{grid-template-columns:auto 1fr}.lvl{grid-row:auto;grid-column:1 / -1;text-align:left;margin-top:8px}.lvl i{justify-content:flex-start}}
+
+/* first month */
+.weeks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;position:relative}
+.weeks::before{content:"";position:absolute;left:21px;right:21px;top:20px;height:2px;background:var(--blue-soft)}
+.week .w{position:relative;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--surface);border:2px solid var(--blue);font:700 15px/1 var(--din);color:var(--blue)}
+.week h3{font-size:17px;margin-top:12px}
+.week p{font-size:14.5px;color:var(--ink-2);margin-top:6px}
+@media (max-width:860px){.weeks{grid-template-columns:1fr 1fr;row-gap:28px}.weeks::before{display:none}}
+@media (max-width:520px){.weeks{grid-template-columns:1fr}}
+.res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:8px}
+.res h4{margin:0 0 6px;font-size:15px}
+.res ul{margin:0;padding-left:1.1em;font-size:14.5px}
+.res .tip{font-size:13px;color:var(--muted);margin-top:8px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+@media (max-width:760px){.res{grid-template-columns:1fr}}
+.gloss-sub{color:var(--muted);font-size:14.5px;margin-bottom:8px}
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0}
+.gloss div{padding:10px 0;border-bottom:1px solid var(--line)}
+.gloss dt{font-weight:700;font-size:15px}
+.gloss dt span{font-weight:400;color:var(--muted);margin-left:8px;font-size:14px}
+.gloss dd{margin:2px 0 0;font-size:14.5px;color:var(--ink-2)}
+@media (max-width:700px){.gloss{grid-template-columns:1fr}}
+
+footer{margin-top:84px;border-top:1px solid var(--line);background:var(--surface);padding:28px 0 40px;font-size:13.5px;color:var(--muted)}
+footer h2{font-size:15px;color:var(--ink);margin-bottom:8px;letter-spacing:0}
+.src{columns:2;column-gap:28px;padding-left:1.2em;margin:0 0 18px}
+.src li{break-inside:avoid;margin:2px 0}
+@media (max-width:700px){.src{columns:1}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="scene" viewBox="0 0 1200 560"><rect x="0" y="96" width="1200" height="374" class="sc-wall"/><path d="M60 104 V470" class="sc-seam"/><path d="M180 104 V470" class="sc-seam"/><path d="M300 104 V470" class="sc-seam"/><path d="M420 104 V470" class="sc-seam"/><path d="M540 104 V470" class="sc-seam"/><path d="M660 104 V470" class="sc-seam"/><path d="M780 104 V470" class="sc-seam"/><path d="M900 104 V470" class="sc-seam"/><path d="M1020 104 V470" class="sc-seam"/><path d="M1140 104 V470" class="sc-seam"/><rect x="0" y="86" width="1200" height="12" class="sc-ceiling"/><rect x="0" y="118" width="930" height="14" rx="3" class="sc-tray"/><path d="M14 120 V130" class="sc-tray-rib"/><path d="M40 120 V130" class="sc-tray-rib"/><path d="M66 120 V130" class="sc-tray-rib"/><path d="M92 120 V130" class="sc-tray-rib"/><path d="M118 120 V130" class="sc-tray-rib"/><path d="M144 120 V130" class="sc-tray-rib"/><path d="M170 120 V130" class="sc-tray-rib"/><path d="M196 120 V130" class="sc-tray-rib"/><path d="M222 120 V130" class="sc-tray-rib"/><path d="M248 120 V130" class="sc-tray-rib"/><path d="M274 120 V130" class="sc-tray-rib"/><path d="M300 120 V130" class="sc-tray-rib"/><path d="M326 120 V130" class="sc-tray-rib"/><path d="M352 120 V130" class="sc-tray-rib"/><path d="M378 120 V130" class="sc-tray-rib"/><path d="M404 120 V130" class="sc-tray-rib"/><path d="M430 120 V130" class="sc-tray-rib"/><path d="M456 120 V130" class="sc-tray-rib"/><path d="M482 120 V130" class="sc-tray-rib"/><path d="M508 120 V130" class="sc-tray-rib"/><path d="M534 120 V130" class="sc-tray-rib"/><path d="M560 120 V130" class="sc-tray-rib"/><path d="M586 120 V130" class="sc-tray-rib"/><path d="M612 120 V130" class="sc-tray-rib"/><path d="M638 120 V130" class="sc-tray-rib"/><path d="M664 120 V130" class="sc-tray-rib"/><path d="M690 120 V130" class="sc-tray-rib"/><path d="M716 120 V130" class="sc-tray-rib"/><path d="M742 120 V130" class="sc-tray-rib"/><path d="M768 120 V130" class="sc-tray-rib"/><path d="M794 120 V130" class="sc-tray-rib"/><path d="M820 120 V130" class="sc-tray-rib"/><path d="M846 120 V130" class="sc-tray-rib"/><path d="M872 120 V130" class="sc-tray-rib"/><path d="M898 120 V130" class="sc-tray-rib"/><path d="M924 120 V130" class="sc-tray-rib"/><rect x="0" y="470" width="1200" height="90" class="sc-floor"/><path d="M0 470 H1200" class="sc-floor-edge"/><path d="M0 534 H1200" class="sc-lane"/><ellipse cx="112" cy="474" rx="70" ry="9" class="sc-water"/><path d="M70 474 h26 M120 476 h34 M92 471 h14" class="sc-water-glint"/><rect x="206" y="437" width="112" height="33" rx="2" class="sc-step"/><path d="M214 441 V466" class="sc-grate"/><path d="M223 441 V466" class="sc-grate"/><path d="M232 441 V466" class="sc-grate"/><path d="M241 441 V466" class="sc-grate"/><path d="M250 441 V466" class="sc-grate"/><path d="M259 441 V466" class="sc-grate"/><path d="M268 441 V466" class="sc-grate"/><path d="M277 441 V466" class="sc-grate"/><path d="M286 441 V466" class="sc-grate"/><path d="M295 441 V466" class="sc-grate"/><path d="M304 441 V466" class="sc-grate"/><path d="M313 441 V466" class="sc-grate"/><path d="M206 437 h112" class="sc-step-edge"/><path d="M352 132 V196" class="sc-hanger"/><path d="M560 132 V196" class="sc-hanger"/><rect x="318" y="198" width="282" height="16" rx="8" class="sc-pipe sc-pipe-0"/><rect x="318" y="216" width="282" height="16" rx="8" class="sc-pipe sc-pipe-1"/><rect x="318" y="234" width="282" height="16" rx="8" class="sc-pipe sc-pipe-2"/><rect x="336" y="196" width="10" height="56" rx="2" class="sc-clamp"/><rect x="566" y="196" width="10" height="56" rx="2" class="sc-clamp"/><g class="sc-hazard"><rect x="420" y="252" width="84" height="10" rx="2"/></g><path d="M424 262 l8 -10" class="sc-hazard-stripe"/><path d="M436 262 l8 -10" class="sc-hazard-stripe"/><path d="M448 262 l8 -10" class="sc-hazard-stripe"/><path d="M460 262 l8 -10" class="sc-hazard-stripe"/><path d="M472 262 l8 -10" class="sc-hazard-stripe"/><path d="M484 262 l8 -10" class="sc-hazard-stripe"/><path d="M496 262 l8 -10" class="sc-hazard-stripe"/><rect x="806" y="286" width="18" height="184" rx="4" class="sc-pipe sc-pipe-1"/><rect x="772" y="294" width="40" height="12" rx="3" class="sc-pipe sc-pipe-2"/><circle cx="770" cy="300" r="23" class="sc-gauge-ring"/><circle cx="770" cy="300" r="16" class="sc-gauge-face"/><path d="M770 300 l9 -9" class="sc-needle"/><path d="M757 307 a16 16 0 0 1 4 -20" class="sc-gauge-arc"/><rect x="952" y="170" width="160" height="300" rx="4" class="sc-cabinet"/><rect x="960" y="180" width="144" height="280" rx="2" class="sc-door"/><rect x="966" y="262" width="9" height="38" rx="3" class="sc-handle"/><circle cx="1056" cy="198" r="4.5" class="sc-led-g"/><circle cx="1071" cy="198" r="4.5" class="sc-led-y"/><circle cx="1086" cy="198" r="4.5" class="sc-led-o"/><path d="M1016 222 l16 28 h-32 z" class="sc-warn"/><path d="M1017 230 l-5 10 h6 l-4 9" class="sc-warn-bolt"/><path d="M988 340 h88" class="sc-vent"/><path d="M988 354 h88" class="sc-vent"/><path d="M988 368 h88" class="sc-vent"/><path d="M988 382 h88" class="sc-vent"/><path d="M988 396 h88" class="sc-vent"/><path d="M988 410 h88" class="sc-vent"/><path d="M988 424 h88" class="sc-vent"/><path d="M988 438 h88" class="sc-vent"/><g class="sc-booth"><rect x="996" y="14" width="190" height="62" rx="8" class="sc-booth-box"/><rect x="1110" y="24" width="64" height="40" rx="4" class="sc-screen"/><path d="M1118 54 l12 -12 l10 8 l14 -16" class="sc-screen-line"/><circle cx="1046" cy="36" r="11" class="sc-op"/><rect x="1030" y="31" width="32" height="10" rx="5" class="sc-vr"/><path d="M1026 76 q20 -26 40 0" class="sc-op"/><path d="M1074 44 q14 -10 24 0" class="sc-signal"/></g><path d="M1000 70 C 930 120, 900 170, 880 214" class="sc-link"/><g class="robot r-step"><path d="M180.8 274.5 L199.6 320.8 L225.3 359.0" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="225.3" cy="359.0" r="6" class="rb-far-fill"/><path d="M176.5 351.0 L160.4 410.9 L150.0 470.0" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M150.0 470.0 L171.7 466.2" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(181.7 301.7) rotate(6.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(176.5 351.0) rotate(6.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(186.3 257.5) rotate(2.4)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M176.5 351.0 L232.7 377.2 L232.7 437.2" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M232.7 437.2 L254.7 437.2" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M184.8 271.5 L164.5 317.1 L156.5 362.4" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="156.5" cy="362.4" r="6" class="rb-near-fill"/></g><g class="robot r-crouch"><path d="M486.6 317.5 L482.2 367.3 L508.6 404.9" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="508.6" cy="404.9" r="6" class="rb-far-fill"/><path d="M450.6 383.7 L494.4 427.6 L452.0 470.0" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M452.0 470.0 L473.9 468.1" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(475.4 340.8) rotate(30.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(450.6 383.7) rotate(30.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(497.6 302.3) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M450.6 383.7 L510.5 399.8 L485.1 454.2" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M485.1 454.2 L507.1 454.2" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M490.6 314.5 L515.6 357.8 L558.8 373.5" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="558.8" cy="373.5" r="6" class="rb-near-fill"/></g><g class="robot r-kneel"><path d="M659.8 331.1 L665.0 380.8 L679.3 424.6" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="679.3" cy="424.6" r="6" class="rb-far-fill"/><path d="M668.0 408.0 L668.0 470.0 L608.0 472.1" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M608.0 472.1 L611.9 450.4" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(665.4 358.5) rotate(-3.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(668.0 408.0) rotate(-3.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(663.1 314.1) rotate(2.8)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M668.0 408.0 L730.0 410.2 L730.0 470.2" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M730.0 470.2 L752.0 470.2" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M663.8 328.1 L687.3 372.3 L732.8 378.7" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="732.8" cy="378.7" r="6" class="rb-near-fill"/></g><path d="M684 290 L744 298" class="sc-sight"/><g class="robot r-reach"><path d="M856.9 271.9 L865.6 321.2 L879.8 364.9" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="879.8" cy="364.9" r="6" class="rb-far-fill"/><path d="M860.9 348.9 L852.3 410.3 L846.0 470.0" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M846.0 470.0 L868.0 470.0" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(860.9 299.3) rotate(0.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(860.9 348.9) rotate(0.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(860.9 254.9) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M860.9 348.9 L871.7 410.0 L876.9 469.8" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M876.9 469.8 L898.9 469.8" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M860.9 268.9 L910.7 264.6 L956.0 272.6" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="956.0" cy="272.6" r="6" class="rb-near-fill"/></g></symbol></defs></svg>
+<div class="bar"><div class="wrap"><a class="brand" href="#top">人形全身运控<span>课题地图</span></a><nav class="nav" aria-label="页面导航"><a href="#s1">看懂</a><a href="#s2">论文</a><a href="#s3">场景</a><a href="#s4">课题</a><a href="#s5">上手</a></nav><div class="lang" role="group" aria-label="语言"><span aria-current="true">中</span><a href="../" hreflang="en" lang="en">EN</a></div></div></div>
+
+<header class="hero wrap" id="top">
+  <div class="hero-top">
+    <div>
+      <h1>人形机器人全身运控<small>研究生课题地图</small></h1>
+      <p class="lede">写给联合培养的研究生同学。先用五分钟看懂这个方向，再看 13 个前沿工作的视频和讲解，最后对照巡检现场，挑一个想做的课题。</p>
+    </div>
+    <div class="spec">
+      <p><b>方向一句话：</b>以规模化运动跟踪模型作为人形机器人的通用“小脑”，围绕它做高效训练、跨本体迁移和真机落地。</p>
+      <p class="meta">ONE-G（万机）整理，信息截至 2026 年 10 月。</p>
+    </div>
+  </div>
+  <div class="scene-box">
+    <svg class="scene" viewBox="0 0 1200 560" role="img" aria-labelledby="scene-title">
+      <title id="scene-title">巡检现场示意：机器人沿巡检通道依次跨过湿滑台阶、蹲行通过低矮管架、跪姿读取低位仪表、伸手开配电柜门；背部背着检测设备；远处控制室可远程接管。</title>
+      <use href="#scene" width="1200" height="560"/>
+      <path class="hero-route" d="M24 512 H1176" pathLength="1"/><a href="#need-1" class="sc-mark" style="--i:0" aria-label="1. 台阶、格栅与湿滑地面"><title>台阶、格栅与湿滑地面</title><circle cx="168" cy="512" r="17"/><text x="168" y="518.5">1</text></a><a href="#need-2" class="sc-mark" style="--i:1" aria-label="2. 低矮管道与狭窄通道"><title>低矮管道与狭窄通道</title><circle cx="455" cy="512" r="17"/><text x="455" y="518.5">2</text></a><a href="#need-3" class="sc-mark" style="--i:2" aria-label="3. 低位仪表读数"><title>低位仪表读数</title><circle cx="690" cy="512" r="17"/><text x="690" y="518.5">3</text></a><a href="#need-4" class="sc-mark" style="--i:3" aria-label="4. 开柜门、按按钮、拧阀门"><title>开柜门、按按钮、拧阀门</title><circle cx="900" cy="512" r="17"/><text x="900" y="518.5">4</text></a><path d="M398 322 L380 358" class="sc-leader"/><a href="#need-5" class="sc-mark" style="--i:4" aria-label="5. 背负检测设备"><title>背负检测设备</title><circle cx="372" cy="372" r="17"/><text x="372" y="378.5">5</text></a><a href="#need-6" class="sc-mark" style="--i:5" aria-label="6. 异常时远程接管"><title>异常时远程接管</title><circle cx="972" cy="46" r="17"/><text x="972" y="52.5">6</text></a>
+    </svg>
+  </div>
+  <p class="swipe">左右滑动看完整场景；点数字跳到对应的需求。</p>
+  <ol class="legend" aria-label="巡检现场的六类需求"><li><a href="#need-1"><span class="pin">1</span><span>台阶、格栅与湿滑地面</span></a></li><li><a href="#need-2"><span class="pin">2</span><span>低矮管道与狭窄通道</span></a></li><li><a href="#need-3"><span class="pin">3</span><span>低位仪表读数</span></a></li><li><a href="#need-4"><span class="pin">4</span><span>开柜门、按按钮、拧阀门</span></a></li><li><a href="#need-5"><span class="pin">5</span><span>背负检测设备</span></a></li><li><a href="#need-6"><span class="pin">6</span><span>异常时远程接管</span></a></li></ol>
+</header>
+<main>
+
+<section class="station wrap" id="s1" aria-labelledby="s1-h">
+  <div class="st-head"><span class="st-no" aria-hidden="true">1</span><h2 id="s1-h">五分钟看懂这个方向</h2><p>人形机器人学动作，大致是一条六站的流水线。每一站都有代表性工作，点名字可以跳到下面的视频卡片。</p></div>
+  <ol class="pipe"><li class="stage"><div class="ic"><span class="n">1</span><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="9" r="4.5"/><path d="M24 14 V29 M24 18 L14 24 M24 18 L34 13 M24 29 L17 42 M24 29 L32 41"/><circle cx="14" cy="24" r="2" class="i-dot"/><circle cx="34" cy="13" r="2" class="i-dot"/><circle cx="17" cy="42" r="2" class="i-dot"/><circle cx="32" cy="41" r="2" class="i-dot"/></svg></div><h3>人的动作</h3><span class="alias">打个比方：教材</span><p>动捕、网络视频、VR 遥操作，都能变成机器人的学习素材。</p><div class="chips"><a class="wk" data-g="base" href="#w-humanoid-gpt">Humanoid-GPT</a><a class="wk" data-g="real" href="#w-twist2">TWIST2</a></div></li><li class="stage"><div class="ic"><span class="n">2</span><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="12" r="3.5"/><path d="M10 16 V28 M10 20 L4 25 M10 20 L16 25 M10 28 L6 38 M10 28 L14 38"/><path d="M19 25 H28 M25 21 L29 25 L25 29"/><rect x="33" y="8" width="11" height="9" rx="3"/><rect x="34" y="19" width="9" height="12" rx="3"/><path d="M36 31 V40 M41 31 V40 M34 21 L31 28 M43 21 L46 28"/></svg></div><h3>重定向</h3><span class="alias">打个比方：量体裁衣</span><p>人和机器人身高、关节都不一样，要先把动作改成机器人做得出来的版本。</p><div class="chips"><a class="wk" data-g="data" href="#w-gmr">GMR</a><a class="wk" data-g="data" href="#w-omniretarget">OmniRetarget</a></div></li><li class="stage"><div class="ic"><span class="n">3</span><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="5"/><path d="M5 18 H43 M5 30 H43 M17.7 6 V42 M30.3 6 V42" class="i-thin"/><circle cx="11.3" cy="12" r="2.2" class="i-dot"/><circle cx="24" cy="24" r="2.2" class="i-dot"/><circle cx="36.6" cy="36" r="2.2" class="i-dot"/><circle cx="36.6" cy="12" r="2.2" class="i-dot"/><circle cx="11.3" cy="36" r="2.2" class="i-dot"/></svg></div><h3>仿真里练</h3><span class="alias">打个比方：虚拟训练馆</span><p>成千上万个机器人在 GPU 上同时练，摔倒不心疼。关键是练得快、练得像。</p><div class="chips"><a class="wk" data-g="tool" href="#w-mjlab">mjlab</a><a class="wk" data-g="onegs" href="#w-supermimic">SuperMimic</a></div></li><li class="stage"><div class="ic"><span class="n">4</span><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="32" height="28" rx="9"/><path d="M14 22 h5 l3 -7 l4 14 l3 -7 h6"/><path d="M20 36 V42 M28 36 V42 M16 42 H32"/></svg></div><h3>通用跟踪器</h3><span class="alias">打个比方：机器人的小脑</span><p>给它一段目标动作，它负责稳稳做出来。现在的趋势是做大、做通用。</p><div class="chips"><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a><a class="wk" data-g="base" href="#w-beyondmimic">BeyondMimic</a><a class="wk" data-g="base" href="#w-humanoid-gpt">Humanoid-GPT</a><a class="wk" data-g="base" href="#w-bfm-zero">BFM-Zero</a></div></li><li class="stage"><div class="ic"><span class="n">5</span><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 26 q0 -9 9 -9 h20 q9 0 9 9 v3 q0 6 -6 6 h-6 l-4 -4 h-6 l-4 4 h-6 q-6 0 -6 -6 z"/><path d="M26 4 h17 q3 0 3 3 v6 q0 3 -3 3 h-9 l-4 4 v-4 h-4 q-3 0 -3 -3 v-6 q0 -3 3 -3 z" class="i-thin"/></svg></div><h3>上层指挥</h3><span class="alias">打个比方：大脑和遥控器</span><p>VR 遥操作、规划器或 VLA 大模型，告诉小脑下一步做什么；碰到物体时再加一点修正。</p><div class="chips"><a class="wk" data-g="real" href="#w-twist2">TWIST2</a><a class="wk" data-g="real" href="#w-mosaic">MOSAIC</a><a class="wk" data-g="real" href="#w-resmimic">ResMimic</a></div></li><li class="stage"><div class="ic"><span class="n">6</span><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="16" rx="3" class="i-dash"/><path d="M22 16 H28 M25 13 L28 16 L25 19"/><rect x="32" y="6" width="11" height="9" rx="3"/><rect x="33" y="17" width="9" height="12" rx="3"/><path d="M35 29 V39 M40 29 V39 M28 42 H47"/></svg></div><h3>真机落地</h3><span class="alias">打个比方：下场比赛</span><p>仿真和现实总有差距，需要对齐和适配；换一台机器人，还要迁移。</p><div class="chips"><a class="wk" data-g="real" href="#w-asap">ASAP</a><a class="wk" data-g="onegs" href="#w-any2any">Any2Any</a></div></li></ol>
+  <h3 class="sub-h">ONE-G 正在跟进的三条线</h3>
+  <p class="sub-p">三个工作分别解决三件事：底座够不够强，训练贵不贵，能不能装进自家机器人。</p>
+  <div class="trio">
+    <div class="leg"><span class="role">让训练更便宜</span><h3>SuperMimic</h3><svg viewBox="0 0 300 110" aria-hidden="true"><g transform="translate(0 4)"><rect x="0" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="0" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="11" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="22" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="33" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="44" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="55" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="66" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="0" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="15" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="30" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="45" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="60" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="75" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="90" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="105" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="120" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="135" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="150" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="165" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="180" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="195" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="210" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/><rect x="225" y="77" width="12" height="8" rx="1.5" class="gpu-cell"/></g><text x="0" y="106" class="dia-t">SONIC：128 卡 × 7 天</text><rect x="264" y="36" width="24" height="16" rx="2" class="gpu-one"/><text x="298" y="106" class="dia-t ink" text-anchor="end">1 卡约 3 小时</text></svg>
+      <p>用可微世界模型代替大部分仿真采样。按论文的对比，单卡约 3 小时就超过了 SONIC 发布版的回报。</p><div class="chips"><a class="wk" data-g="onegs" href="#w-supermimic">SuperMimic</a></div></div>
+    <div class="arrow" aria-hidden="true"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16 H26 M19 9 L26 16 L19 23"/></svg></div>
+    <div class="leg core"><span class="role">通用跟踪底座</span><h3>SONIC</h3><svg viewBox="0 0 300 168" aria-hidden="true"><rect x="0" y="18" width="104" height="24" rx="12" class="in-chip"/><text x="52" y="34.5" class="dia-t ink" text-anchor="middle">VR 遥操作</text><path d="M108 30 C 124 30, 122 80, 134 80" class="dia-arrow" stroke-width="1.5" opacity=".5"/><rect x="0" y="52" width="104" height="24" rx="12" class="in-chip"/><text x="52" y="68.5" class="dia-t ink" text-anchor="middle">人体视频</text><path d="M108 64 C 124 64, 122 80, 134 80" class="dia-arrow" stroke-width="1.5" opacity=".5"/><rect x="0" y="86" width="104" height="24" rx="12" class="in-chip"/><text x="52" y="102.5" class="dia-t ink" text-anchor="middle">VLA 指令</text><path d="M108 98 C 124 98, 122 80, 134 80" class="dia-arrow" stroke-width="1.5" opacity=".5"/><rect x="0" y="120" width="104" height="24" rx="12" class="in-chip"/><text x="52" y="136.5" class="dia-t ink" text-anchor="middle">规划器</text><path d="M108 132 C 124 132, 122 80, 134 80" class="dia-arrow" stroke-width="1.5" opacity=".5"/><path d="M136 80 h4" class="dia-arrow"/><g class="robot " transform="translate(166.0 93.4) scale(0.55) translate(-166.0 -93.4)"><path d="M164.8 16.5 L180.2 64.0 L203.2 103.9" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="203.2" cy="103.9" r="6" class="rb-far-fill"/><path d="M166.0 93.4 L157.4 154.8 L151.1 214.5" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M151.1 214.5 L173.1 214.5" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(167.7 43.8) rotate(2.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(166.0 93.4) rotate(2.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(169.3 -0.5) rotate(0.8)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M166.0 93.4 L176.8 154.5 L181.0 214.3" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M181.0 214.3 L203.0 214.3" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M168.8 13.5 L151.7 60.4 L159.7 105.7" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="159.7" cy="105.7" r="6" class="rb-near-fill"/></g><text x="204" y="72" class="dia-t">同一个策略</text><text x="204" y="90" class="dia-t ink">稳稳做出来</text></svg>
+      <p>一个大号的通用“小脑”：42M 参数、700 小时动捕，各种上层输入都交给同一个策略执行。</p><div class="chips"><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a></div></div>
+    <div class="arrow" aria-hidden="true"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16 H26 M19 9 L26 16 L19 23"/></svg></div>
+    <div class="leg"><span class="role">装进新身体</span><h3>Any2Any</h3><svg viewBox="0 0 300 168" aria-hidden="true"><g class="robot " transform="translate(62.0 95.1) scale(0.42) translate(-62.0 -95.1)"><path d="M58.0 18.1 L66.7 67.3 L82.4 110.5" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="82.4" cy="110.5" r="6" class="rb-far-fill"/><path d="M62.0 95.1 L53.4 156.5 L48.1 216.2" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M48.1 216.2 L70.1 216.2" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(62.0 45.5) rotate(0.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(62.0 95.1) rotate(0.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(62.0 1.1) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M62.0 95.1 L70.6 156.5 L74.8 216.3" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M74.8 216.3 L96.8 216.3" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M62.0 15.1 L55.0 64.6 L59.8 110.3" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="59.8" cy="110.3" r="6" class="rb-near-fill"/></g><g class="robot " transform="translate(232.0 79.3) scale(0.55) translate(-232.0 -79.3)"><path d="M228.0 2.3 L236.7 51.6 L252.4 94.8" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="252.4" cy="94.8" r="6" class="rb-far-fill"/><path d="M232.0 79.3 L223.4 140.7 L218.1 200.5" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M218.1 200.5 L240.1 200.5" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(232.0 29.7) rotate(0.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(232.0 79.3) rotate(0.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(232.0 -14.7) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M232.0 79.3 L240.6 140.7 L244.8 200.6" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M244.8 200.6 L266.8 200.6" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M232.0 -0.7 L225.0 48.8 L229.8 94.6" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="229.8" cy="94.6" r="6" class="rb-near-fill"/></g><path d="M104 92 H172 M164 84 L173 92 L164 100" class="dia-arrow"/><rect x="118" y="104" width="42" height="20" rx="4" class="lora"/><text x="139" y="118.5" class="lora-t" text-anchor="middle">LoRA</text><text x="62" y="164" class="dia-t" text-anchor="middle">G1</text><text x="232" y="164" class="dia-t ink" text-anchor="middle">新本体</text></svg>
+      <p>先做运动学对齐，再用 LoRA 只调动力学相关的部分，约 1% 的代价迁移到新本体。</p><div class="chips"><a class="wk" data-g="onegs" href="#w-any2any">Any2Any</a></div></div>
+  </div>
+  <p class="trio-note">底座决定能力上限，SuperMimic 决定迭代速度，Any2Any 决定能不能落到自家机器人上。这三件事，正好是做巡检机器人最关心的。</p>
+</section>
+
+<section class="station wrap" id="s2" aria-labelledby="s2-h">
+  <div class="st-head"><span class="st-no" aria-hidden="true">2</span><h2 id="s2-h">13 个前沿工作，先看视频</h2><p>每张卡片：它做了什么、打个比方、和巡检有什么关系。视频都来自论文官方项目页，点“播放”才加载，下方小标签可以切换片段。</p></div>
+  <div class="filters" role="group" aria-label="按方向筛选"><button type="button" class="filter" data-g="all" aria-pressed="true">全部 <span class="c">13</span></button><button type="button" class="filter" data-g="onegs" aria-pressed="false">ONE-G 正在跟进 <span class="c">3</span></button><button type="button" class="filter" data-g="base" aria-pressed="false">通用跟踪底座 <span class="c">3</span></button><button type="button" class="filter" data-g="data" aria-pressed="false">重定向与跨本体数据 <span class="c">2</span></button><button type="button" class="filter" data-g="real" aria-pressed="false">真机落地 <span class="c">4</span></button><button type="button" class="filter" data-g="tool" aria-pressed="false">上手工具 <span class="c">1</span></button></div>
+  <div class="works">
+<article class="work" id="w-sonic" data-g="onegs">
+  <div class="plate"><h3>SONIC</h3><span class="venue">Science Robotics</span></div>
+  <p class="org"><span>NVIDIA</span><span class="follow">ONE-G 正在跟进</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none" poster="https://nvlabs.github.io/GEAR-SONIC/static/images/teaser_poster.png"></video><button type="button" class="play" aria-label="播放 SONIC 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://nvlabs.github.io/GEAR-SONIC/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="SONIC 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://nvlabs.github.io/GEAR-SONIC/static/videos/teaser_title.mp4" data-poster="https://nvlabs.github.io/GEAR-SONIC/static/images/teaser_poster.png" data-page="https://nvlabs.github.io/GEAR-SONIC/">能力集锦</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://nvlabs.github.io/GEAR-SONIC/static/videos/planner/squat_crawl/planner_squat.mp4" data-poster="" data-page="https://nvlabs.github.io/GEAR-SONIC/">下蹲</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://nvlabs.github.io/GEAR-SONIC/static/videos/planner/squat_crawl/planner_kneeling.mp4" data-poster="" data-page="https://nvlabs.github.io/GEAR-SONIC/">跪地</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://nvlabs.github.io/GEAR-SONIC/static/videos/planner/squat_crawl/planner_elbow_crawling.mp4" data-poster="" data-page="https://nvlabs.github.io/GEAR-SONIC/">肘部匍匐</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://nvlabs.github.io/GEAR-SONIC/static/videos/teleop/vr_wholebody/wbt.mp4" data-poster="" data-page="https://nvlabs.github.io/GEAR-SONIC/">VR 全身遥操作</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://nvlabs.github.io/GEAR-SONIC/static/videos/tracking/robust1.mp4" data-poster="" data-page="https://nvlabs.github.io/GEAR-SONIC/">抗扰跟踪</button></div><figcaption>视频来自 SONIC 官方项目页，版权归原作者。 <a href="https://nvlabs.github.io/GEAR-SONIC/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">把运动跟踪当作可规模化的基础任务，模型扩到 42M 参数、数据扩到 700 小时动捕，同一个策略可以接 VR 遥操作、人体视频和 VLA 等多种输入。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>像看过 700 小时人体动作的“小脑”：上层不管是遥控器、视频还是大模型，只需要告诉它下一步做什么动作。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>下蹲、跪地、匍匐这些巡检常用姿态都有真机演示，还能直接接 VR 遥操作接管。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>42M 参数</li><li>700 小时动捕</li><li>一个策略，多种输入</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2511.07820" target="_blank" rel="noopener">论文</a><a href="https://nvlabs.github.io/GEAR-SONIC/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/NVlabs/GR00T-WholeBodyControl" target="_blank" rel="noopener">代码</a></p>
+  </div>
+</article>
+<article class="work" id="w-any2any" data-g="onegs">
+  <div class="plate"><h3>Any2Any</h3><span class="venue">arXiv 2026</span></div>
+  <p class="org"><span>逐际动力 LimX Dynamics</span><span class="follow">ONE-G 正在跟进</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 Any2Any 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://any2any.top/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="Any2Any 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://any2any.top/vedio_data/cover_video.mp4" data-poster="" data-page="https://any2any.top/">迁移效果总览</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://any2any.top/vedio_data/sim2real-sonic3/sonic_G12oli-7-running.mp4" data-poster="" data-page="https://any2any.top/">Oli 真机：跑步</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://any2any.top/vedio_data/sim2real-sonic3/sonic_G12oli-8-locomanipulation.mp4" data-poster="" data-page="https://any2any.top/">Oli 真机：移动操作</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://any2any.top/vedio_data/simulation_multi/multiWBT-window-normal-speed.mp4" data-poster="" data-page="https://any2any.top/">多本体同时仿真</button></div><figcaption>视频来自 Any2Any 官方项目页，版权归原作者。 <a href="https://any2any.top/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">先对齐源、目标人形的运动学接口，再只在动力学敏感的模块上加 LoRA，用约 1% 的算力和数据，把 G1 上预训练的 SONIC 迁移到 LimX Oli 和 Luna。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>像老司机换车：驾驶技术都在，只要重新适应新车油门和刹车的手感。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>自家巡检本体不必从零训练；背负设备带来的质量变化，也可以借鉴这种“只调动力学部分”的思路。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>约 1% 算力和数据</li><li>只训约 5% 参数</li><li>4 款人形验证</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2605.23733" target="_blank" rel="noopener">论文</a><a href="https://any2any.top/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/Ming827/any2any_sonic2Oli" target="_blank" rel="noopener">代码</a></p>
+  </div>
+</article>
+<article class="work" id="w-supermimic" data-g="onegs">
+  <div class="plate"><h3>SuperMimic</h3><span class="venue">CoRL 2026</span></div>
+  <p class="org"><span>UC Berkeley</span><span class="follow">ONE-G 正在跟进</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 SuperMimic 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://supermimic.github.io/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="SuperMimic 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://supermimic.github.io/media/real/film-1080.mp4" data-poster="" data-page="https://supermimic.github.io/">真机短片</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://supermimic.github.io/media/world-model/wm_slip.mp4" data-poster="" data-page="https://supermimic.github.io/">世界模型预测打滑</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://supermimic.github.io/media/world-model/wm_off.mp4" data-poster="" data-page="https://supermimic.github.io/">关掉策略：预测摔倒</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://supermimic.github.io/media/real/real_grove-roll-wide.mp4" data-poster="" data-page="https://supermimic.github.io/">真机翻滚</button></div><figcaption>视频来自 SuperMimic 官方项目页，版权归原作者。 <a href="https://supermimic.github.io/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">用一个可微世界模型拟合仿真器数据，再对它反传梯度来训练策略；单卡 3 小时就超过了 SONIC 发布版的回报（SONIC 用 128 卡训了 7 天），并零样本部署到 G1 真机。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>像体操运动员在脑子里预演：先学会一套“物理直觉”，再在想象里反复练，真实仿真只用来校准。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>实验室单卡就能迭代巡检要用的新技能；论文还演示了世界模型对湿滑地面打滑的预测。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>1 张 GPU</li><li>约 3 小时</li><li>12.9 万段动作</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2610.28480" target="_blank" rel="noopener">论文</a><a href="https://supermimic.github.io/" target="_blank" rel="noopener">项目主页</a><a href="https://supermimic.github.io/demo/" target="_blank" rel="noopener">网页里试玩</a></p>
+  </div>
+</article>
+<article class="work" id="w-beyondmimic" data-g="base">
+  <div class="plate"><h3>BeyondMimic</h3><span class="venue">Science Robotics 2026</span></div>
+  <p class="org"><span>UC Berkeley、Stanford</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 BeyondMimic 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://beyondmimic.github.io/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="BeyondMimic 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://beyondmimic.github.io/static/videos/teaser.mp4" data-poster="" data-page="https://beyondmimic.github.io/">集锦</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://beyondmimic.github.io/static/videos/motion_tracking/prep_IMG_2643.mp4" data-poster="" data-page="https://beyondmimic.github.io/">真机动作跟踪</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://beyondmimic.github.io/static/videos/motion_tracking/prep_IMG_2669.mp4" data-poster="" data-page="https://beyondmimic.github.io/">真机动作跟踪 2</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://beyondmimic.github.io/static/videos/diffusion/prep_C1883.mp4" data-poster="" data-page="https://beyondmimic.github.io/">扩散策略做任务</button></div><figcaption>视频来自 BeyondMimic 官方项目页，版权归原作者。 <a href="https://beyondmimic.github.io/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">开源了一套能在真机上稳定做出侧手翻、腾空转体、冲刺等高动态动作的跟踪训练配方，并用引导扩散把这些动作组合成导航、避障等下游任务。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>先把每个高难动作练扎实，再把它们串成一门能完成任务的“动作语言”。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>开源配方可以直接复现；引导扩散的思路，适合把“走到点位、蹲下、检查”串成一个任务。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>配方全开源</li><li>引导扩散</li><li>真机侧手翻</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2508.08241" target="_blank" rel="noopener">论文</a><a href="https://beyondmimic.github.io/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/HybridRobotics/whole_body_tracking" target="_blank" rel="noopener">代码</a><a href="https://youtu.be/RS_MtKVIAzY" target="_blank" rel="noopener">完整视频 YouTube</a></p>
+  </div>
+</article>
+<article class="work" id="w-humanoid-gpt" data-g="base">
+  <div class="plate"><h3>Humanoid-GPT</h3><span class="venue">CVPR 2026</span></div>
+  <p class="org"><span>清华、银河通用、北航等</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 Humanoid-GPT 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://qizekun.github.io/Humanoid-GPT/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="Humanoid-GPT 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://qizekun.github.io/Humanoid-GPT/videos/home.mp4" data-poster="" data-page="https://qizekun.github.io/Humanoid-GPT/">总览</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://qizekun.github.io/Humanoid-GPT/videos/demo/security.mp4" data-poster="" data-page="https://qizekun.github.io/Humanoid-GPT/">安防巡逻</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://qizekun.github.io/Humanoid-GPT/videos/demo/disinfection.mp4" data-poster="" data-page="https://qizekun.github.io/Humanoid-GPT/">消杀作业</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://qizekun.github.io/Humanoid-GPT/videos/conpare_with_sonic/4.mp4" data-poster="" data-page="https://qizekun.github.io/Humanoid-GPT/">平衡动作：对比 SONIC</button></div><figcaption>视频来自 Humanoid-GPT 官方项目页，版权归原作者。 <a href="https://qizekun.github.io/Humanoid-GPT/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">在 20 亿帧重定向动作上先训练多个强化学习专家，再蒸馏进一个 GPT 式因果 Transformer，零样本跟踪训练中没见过的高动态动作，并给出数据与模型规模的 scaling law。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>像大语言模型读遍文本：把能找到的人体动作都喂进去，模型越大，越会举一反三。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>项目页有安防巡逻、消杀作业等真机演示，和巡检工况很接近。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>20 亿帧动作</li><li>Transformer</li><li>4090 上推理 &lt;1.5 ms</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2606.03985" target="_blank" rel="noopener">论文</a><a href="https://qizekun.github.io/Humanoid-GPT/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/GalaxyGeneralRobotics/Humanoid-GPT" target="_blank" rel="noopener">代码</a></p>
+  </div>
+</article>
+<article class="work" id="w-bfm-zero" data-g="base">
+  <div class="plate"><h3>BFM-Zero</h3><span class="venue">ICLR 2026</span></div>
+  <p class="org"><span>CMU、Meta</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 BFM-Zero 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://lecar-lab.github.io/BFM-Zero/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="BFM-Zero 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://lecar-lab.github.io/BFM-Zero/resources/head/head_new_firefox_720p.mp4" data-poster="" data-page="https://lecar-lab.github.io/BFM-Zero/">总览</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://lecar-lab.github.io/BFM-Zero/resources/disturbance/disturbance-1_firefox_720p.mp4" data-poster="" data-page="https://lecar-lab.github.io/BFM-Zero/">抗扰与恢复</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://lecar-lab.github.io/BFM-Zero/resources/adaptation/before_adapt_firefox_720p.mp4" data-poster="" data-page="https://lecar-lab.github.io/BFM-Zero/">负重 4 kg：适配前</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://lecar-lab.github.io/BFM-Zero/resources/adaptation/after_adapt_firefox_720p.mp4" data-poster="" data-page="https://lecar-lab.github.io/BFM-Zero/">负重 4 kg：适配后</button></div><figcaption>视频来自 BFM-Zero 官方项目页，版权归原作者。 <a href="https://lecar-lab.github.io/BFM-Zero/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">走无监督强化学习路线，把动作、目标姿态和奖励放进同一个潜空间；一个策略不用重训，就能做动作跟踪、到达目标姿态和奖励优化。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>不背具体动作，而是学一张“身体能力地图”：给它动作、目标或奖励，它都能在地图上找到对应的做法。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>演示了躯干负重 4 kg 后的少样本适配，以及被拽倒后的自然恢复，和背负设备、现场磕碰很像。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>零样本多任务</li><li>无监督强化学习</li><li>4 kg 负载适配</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2511.04131" target="_blank" rel="noopener">论文</a><a href="https://lecar-lab.github.io/BFM-Zero/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/LeCAR-Lab/BFM-Zero" target="_blank" rel="noopener">代码</a><a href="https://www.youtube.com/watch?v=jYI-LZNvUY4" target="_blank" rel="noopener">完整视频 YouTube</a></p>
+  </div>
+</article>
+<article class="work" id="w-gmr" data-g="data">
+  <div class="plate"><h3>GMR<small>Retargeting Matters</small></h3><span class="venue">ICRA 2026</span></div>
+  <p class="org"><span>Stanford</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 GMR 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://github.com/YanjieZe/GMR" target="_blank" rel="noopener">去官方项目页观看</a></div></div><button type="button" class="clip" hidden role="tab" aria-selected="true" data-src="https://yanjieze.com/projects/TWIST2/images/GMR.mp4" data-poster="" data-page="https://github.com/YanjieZe/GMR">同一段动作，适配多款机器人</button><figcaption>视频来自 TWIST2 项目页的相关工作介绍，版权归原作者。 <a href="https://github.com/YanjieZe/GMR" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">系统评估了重定向质量对跟踪策略的影响；开源的实时重定向工具已支持十几款人形（含轮式人形），Any2Any 也是用它为各个本体准备训练数据。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>给机器人量体裁衣：把人的动作改成机器人身体做得出来的样子。裁得好不好，直接决定后面学得好不好。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>同一段巡检动作，可以很快适配到不同本体；还支持从单目视频里提取人体动作。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>实时</li><li>十几款人形</li><li>支持视频输入</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2510.02252" target="_blank" rel="noopener">论文</a><a href="https://github.com/YanjieZe/GMR" target="_blank" rel="noopener">代码</a></p>
+  </div>
+</article>
+<article class="work" id="w-omniretarget" data-g="data">
+  <div class="plate"><h3>OmniRetarget</h3><span class="venue">ICRA 2026 最佳论文</span></div>
+  <p class="org"><span>Amazon FAR、MIT、UC Berkeley 等</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 OmniRetarget 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://omniretarget.github.io/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="OmniRetarget 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://omniretarget.github.io/static/website_videos/flagship.mp4" data-poster="" data-page="https://omniretarget.github.io/">集锦</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://omniretarget.github.io/static/website_videos/climb_1.mp4" data-poster="" data-page="https://omniretarget.github.io/">攀上平台</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://omniretarget.github.io/static/website_videos/box_1.mp4" data-poster="" data-page="https://omniretarget.github.io/">搬箱子</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://omniretarget.github.io/static/website_videos/terrain_aug_1.mp4" data-poster="" data-page="https://omniretarget.github.io/">地形高度扩增</button></div><figcaption>视频来自 OmniRetarget 官方项目页，版权归原作者。 <a href="https://omniretarget.github.io/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">用交互网格在重定向时保住机器人与物体、地形之间的接触和空间关系，只需很少的奖励设计就能训出移动操作和场景交互策略，还能把一条示范扩增到不同本体、地形和物体。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>不只抄姿势，还要保住“手扶在哪、脚踩在哪”这些接触关系。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>爬平台、搬箱子这类带接触的动作数据，是开柜门、跨障碍的基础。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>ICRA 最佳论文</li><li>交互网格</li><li>数据集开源</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2509.26633" target="_blank" rel="noopener">论文</a><a href="https://omniretarget.github.io/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/amazon-far/holosoma" target="_blank" rel="noopener">代码</a><a href="https://huggingface.co/datasets/omniretarget/OmniRetarget_Dataset" target="_blank" rel="noopener">数据集</a><a href="https://www.youtube.com/watch?v=5ZYFTfGHH8Q" target="_blank" rel="noopener">完整视频 YouTube</a></p>
+  </div>
+</article>
+<article class="work" id="w-asap" data-g="real">
+  <div class="plate"><h3>ASAP</h3><span class="venue">RSS 2025</span></div>
+  <p class="org"><span>CMU 等</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 ASAP 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://agile.human2humanoid.com/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="ASAP 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://agile.human2humanoid.com/static/videos/Hero-ASAP-Video-Website-Hero-16-9-202502031028-1080P.mp4" data-poster="" data-page="https://agile.human2humanoid.com/">集锦</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://agile.human2humanoid.com/static/videos/ASAP-Website-Kick-BeforeASAP-1080P.mp4" data-poster="" data-page="https://agile.human2humanoid.com/">踢腿：对齐前</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://agile.human2humanoid.com/static/videos/ASAP-Website-Kick-AfterASAP-1080P.mp4" data-poster="" data-page="https://agile.human2humanoid.com/">踢腿：对齐后</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://agile.human2humanoid.com/static/videos/ASAP-Motion-SideJump_level3-1080P.mp4" data-poster="" data-page="https://agile.human2humanoid.com/">侧跳 1.3 m</button></div><figcaption>视频来自 ASAP 官方项目页，版权归原作者。 <a href="https://agile.human2humanoid.com/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">先在仿真中预训练，再用真机数据训练一个 delta 动作模型来补偿动力学差异，把它接回仿真器后再微调策略。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>先在模拟器里练，再拿真机录下的“偏差”去修正模拟器，让模拟器越来越像真机。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>把真机误差闭环回仿真，是巡检机器人长期稳定运行的必修课。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>delta 动作模型</li><li>仿真到真机对齐</li><li>代码开源</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2502.01143" target="_blank" rel="noopener">论文</a><a href="https://agile.human2humanoid.com/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/LeCAR-Lab/ASAP" target="_blank" rel="noopener">代码</a><a href="https://www.youtube.com/watch?v=tu7LSNYWDTs" target="_blank" rel="noopener">完整视频 YouTube</a></p>
+  </div>
+</article>
+<article class="work" id="w-mosaic" data-g="real">
+  <div class="plate"><h3>MOSAIC</h3><span class="venue">arXiv 2026</span></div>
+  <p class="org"><span>智源研究院 BAAI 等</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 MOSAIC 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://baai-humanoid.github.io/MOSAIC/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="MOSAIC 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://baai-humanoid.github.io/MOSAIC/static/website_videos/mosaic.mp4" data-poster="" data-page="https://baai-humanoid.github.io/MOSAIC/">总览</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://baai-humanoid.github.io/MOSAIC/static/website_videos/VR%20%E5%8E%9F%E5%9C%B0%E8%B9%B2%E5%A7%BF.mp4" data-poster="" data-page="https://baai-humanoid.github.io/MOSAIC/">VR：蹲姿移动</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://baai-humanoid.github.io/MOSAIC/static/website_videos/noitom%20%E6%B7%B1%E8%B9%B2.mp4" data-poster="" data-page="https://baai-humanoid.github.io/MOSAIC/">动捕服：深蹲</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://baai-humanoid.github.io/MOSAIC/static/website_videos/off%20lafan%20%E5%80%92%E5%9C%B0.mp4" data-poster="" data-page="https://baai-humanoid.github.io/MOSAIC/">回放：倒地起身</button></div><figcaption>视频来自 MOSAIC 官方项目页，版权归原作者。 <a href="https://baai-humanoid.github.io/MOSAIC/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">针对通用跟踪器在真机长时间遥操作中不够稳的问题，用少量接口数据做残差适配；PICO VR 和诺亦腾动捕两套适配模型都已开源。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>通用跟踪器是主干，每换一种遥操作设备，就插上一个小小的“适配器”。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>现场出现异常、需要远程接管时，可以直接参考；代码、模型和数据集都已开源。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>残差适配</li><li>PICO / 诺亦腾</li><li>模型与数据开源</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2602.08594" target="_blank" rel="noopener">论文</a><a href="https://baai-humanoid.github.io/MOSAIC/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/BAAI-Humanoid/MOSAIC" target="_blank" rel="noopener">代码</a><a href="https://huggingface.co/datasets/BAAI-Humanoid/MOSAIC_Dataset" target="_blank" rel="noopener">数据集</a></p>
+  </div>
+</article>
+<article class="work" id="w-twist2" data-g="real">
+  <div class="plate"><h3>TWIST2</h3><span class="venue">ICRA 2026</span></div>
+  <p class="org"><span>Amazon FAR、Stanford 等</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 TWIST2 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://yanjieze.com/projects/TWIST2/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="TWIST2 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://yanjieze.com/projects/TWIST2/videos/portable/twist2_portable_edit.webm" data-poster="" data-page="https://yanjieze.com/projects/TWIST2/">便携采集</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://yanjieze.com/projects/TWIST2/videos/fold/fold2_16x.webm" data-poster="" data-page="https://yanjieze.com/projects/TWIST2/">长程遥操作：叠毛巾</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://yanjieze.com/projects/TWIST2/videos/kickt/kickt_1.webm" data-poster="" data-page="https://yanjieze.com/projects/TWIST2/">自主策略：踢物体</button></div><figcaption>视频来自 TWIST2 官方项目页，版权归原作者。 <a href="https://yanjieze.com/projects/TWIST2/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">用 PICO 4U VR 加一个约 250 美元的二自由度机器人脖子，做到免动捕的便携全身遥操作采数（15 分钟约 100 条示范），系统和数据集都已开源。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>戴上 VR 就能“附身”机器人：成本低、随走随采，攒下大量全身操作示范。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>可以用同样的方式在巡检现场批量采示范，为以后的自主策略攒数据。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>$250 机器人脖子</li><li>15 分钟 100 条</li><li>系统与数据开源</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2511.02832" target="_blank" rel="noopener">论文</a><a href="https://yanjieze.com/projects/TWIST2/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/amazon-far/TWIST2" target="_blank" rel="noopener">代码</a><a href="https://twist-data.github.io/" target="_blank" rel="noopener">数据集</a><a href="https://www.bilibili.com/video/BV18c1bB5EQp/" target="_blank" rel="noopener">B 站视频</a></p>
+  </div>
+</article>
+<article class="work" id="w-resmimic" data-g="real">
+  <div class="plate"><h3>ResMimic</h3><span class="venue">arXiv 2025</span></div>
+  <p class="org"><span>Amazon FAR 等</span></p>
+  <figure class="media"><div class="screen"><video muted playsinline preload="none"></video><button type="button" class="play" aria-label="播放 ResMimic 视频"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pc" cx="12" cy="12" r="11"/><path class="pt" d="M10 8 L16 12 L10 16 Z"/></svg><span>播放视频</span></button><div class="fail"><span>这段视频暂时加载不了</span><a href="https://resmimic.github.io/" target="_blank" rel="noopener">去官方项目页观看</a></div></div><div class="clips" role="tablist" aria-label="ResMimic 视频片段"><button type="button" class="clip" role="tab" aria-selected="true" data-src="https://resmimic.github.io/static/videos/continuous2.mp4" data-poster="" data-page="https://resmimic.github.io/">自主连续搬箱</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://resmimic.github.io/static/videos/kneel.mov" data-poster="" data-page="https://resmimic.github.io/">单膝跪地抬箱</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://resmimic.github.io/static/videos/reactive.mp4" data-poster="" data-page="https://resmimic.github.io/">被推之后的反应</button><button type="button" class="clip" role="tab" aria-selected="false" data-src="https://resmimic.github.io/static/videos/action_viz.mp4" data-poster="" data-page="https://resmimic.github.io/">底座和残差的动作对比</button></div><figcaption>视频来自 ResMimic 官方项目页，版权归原作者。 <a href="https://resmimic.github.io/" target="_blank" rel="noopener">打开原页面</a></figcaption></figure>
+  <div class="body">
+    <p class="one">以大规模人体动作训出的通用跟踪策略为底座，再学一个轻量的残差策略来处理物体交互，在 G1 真机上完成搬箱、抬椅等全身移动操作。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>老师傅（通用跟踪器）把动作框架定好，徒弟（残差策略）只负责“对准物体、用好力气”的那部分修正。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>开柜门、拧阀门、搬工具箱，本质上也是“通用动作 + 精细修正”。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>两阶段残差</li><li>全身接触</li><li>代码开源</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2510.05070" target="_blank" rel="noopener">论文</a><a href="https://resmimic.github.io/" target="_blank" rel="noopener">项目主页</a><a href="https://github.com/amazon-far/ResMimic" target="_blank" rel="noopener">代码</a><a href="https://www.youtube.com/watch?v=dadOH-TpbRk" target="_blank" rel="noopener">完整视频 YouTube</a></p>
+  </div>
+</article>
+<article class="work" id="w-mjlab" data-g="tool">
+  <div class="plate"><h3>mjlab</h3><span class="venue">arXiv 2026</span></div>
+  <p class="org"><span>UC Berkeley 等</span></p>
+  <div class="media"><div class="screen"><div class="stack"><div><span>环境与任务</span><b>Isaac Lab 式 API</b></div><div><span>GPU 并行物理</span><b>MuJoCo Warp</b></div><div class="cmd">uvx --from mjlab --refresh demo</div></div></div><figcaption>示意图：mjlab 的两层结构和官方给出的一行试跑命令。</figcaption></div>
+  <div class="body">
+    <p class="one">沿用 Isaac Lab 的模块化环境 API，底层换成 MuJoCo Warp 的 GPU 仿真；一条命令就能装好，自带速度跟踪、运动模仿等参考任务。</p>
+    <dl class="explain">
+      <dt>打个比方</dt><dd>一个开箱即用的训练场：装好就能让 G1 学走路、学模仿。</dd>
+      <dt class="ins">和巡检的关系</dt><dd>新同学第一周就能跑通运动模仿；和 SuperMimic 用的是同一个仿真底座 MuJoCo Warp。</dd>
+    </dl>
+    <ul class="nums" aria-label="关键数字"><li>一条命令安装</li><li>MuJoCo Warp</li><li>训练需 NVIDIA GPU</li></ul>
+    <p class="links"><a href="https://arxiv.org/abs/2601.22074" target="_blank" rel="noopener">论文</a><a href="https://mujocolab.github.io/mjlab/" target="_blank" rel="noopener">文档</a><a href="https://github.com/mujocolab/mjlab" target="_blank" rel="noopener">代码</a></p>
+  </div>
+</article></div>
+</section>
+
+<section class="station wrap" id="s3" aria-labelledby="s3-h">
+  <div class="st-head"><span class="st-no" aria-hidden="true">3</span><h2 id="s3-h">放到巡检现场看</h2><p>巡检是我们设想的落地场景之一。下面把现场的需求，逐条对到需要的能力、可参考的工作和对应课题。编号和页首插图里的数字一致。</p></div>
+  <div class="needs">
+<div class="need" id="need-1">
+  <div class="thumb"><svg viewBox="10 208 360 270" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene" width="1200" height="560"/></svg><span class="pin">1</span></div>
+  <div><h3>台阶、格栅与湿滑地面</h3><p class="desc">巡检路线上常有台阶和排水格栅，雨天或冲洗后地面湿滑。走得稳，是一切的前提。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>稳健行走、抗扰动、仿真到真机对齐</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a><a class="wk" data-g="onegs" href="#w-supermimic">SuperMimic</a><a class="wk" data-g="real" href="#w-asap">ASAP</a><a class="wk" data-g="base" href="#w-bfm-zero">BFM-Zero</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-f"><b>F</b>真机鲁棒性：湿滑、负载与跌倒</a></dd></div>
+  </dl>
+</div>
+<div class="need" id="need-2">
+  <div class="thumb"><svg viewBox="262 190 388 291" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene" width="1200" height="560"/></svg><span class="pin">2</span></div>
+  <div><h3>低矮管道与狭窄通道</h3><p class="desc">管廊、配电房里常有低矮的管架和窄通道，要弯腰、下蹲，甚至匍匐通过。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>低姿态行进：下蹲、跪姿、匍匐</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a><a class="wk" data-g="base" href="#w-bfm-zero">BFM-Zero</a><a class="wk" data-g="data" href="#w-omniretarget">OmniRetarget</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-c"><b>C</b>巡检动作库与重定向数据引擎</a><a class="tp" href="#t-a"><b>A</b>让通用控制器“换身体”</a></dd></div>
+  </dl>
+</div>
+<div class="need" id="need-3">
+  <div class="thumb"><svg viewBox="586 262 286 214" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene" width="1200" height="560"/></svg><span class="pin">3</span></div>
+  <div><h3>低位仪表读数</h3><p class="desc">压力表、油位计常装在低处，机器人要稳稳蹲下或跪下，让相机正对表盘。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>稳定的蹲姿和跪姿，以及头部视角控制</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a><a class="wk" data-g="real" href="#w-mosaic">MOSAIC</a><a class="wk" data-g="real" href="#w-twist2">TWIST2</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-c"><b>C</b>巡检动作库与重定向数据引擎</a><a class="tp" href="#t-d"><b>D</b>遥操作接管与数据闭环</a></dd></div>
+  </dl>
+</div>
+<div class="need" id="need-4">
+  <div class="thumb"><svg viewBox="780 165 420 315" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene" width="1200" height="560"/></svg><span class="pin">4</span></div>
+  <div><h3>开柜门、按按钮、拧阀门</h3><p class="desc">这类任务要求“对准物体、用对力气”，是全身移动操作的典型场景。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>全身移动操作、接触控制</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="real" href="#w-resmimic">ResMimic</a><a class="wk" data-g="data" href="#w-omniretarget">OmniRetarget</a><a class="wk" data-g="base" href="#w-beyondmimic">BeyondMimic</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-e"><b>E</b>巡检中的全身移动操作</a></dd></div>
+  </dl>
+</div>
+<div class="need" id="need-5">
+  <div class="thumb"><svg viewBox="330 230 220 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene" width="1200" height="560"/></svg><span class="pin">5</span></div>
+  <div><h3>背负检测设备</h3><p class="desc">背上加装相机、传感器或工具箱后，质量和重心都会变，原来的控制器可能就不稳了。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>负载变化下的快速适配</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="base" href="#w-bfm-zero">BFM-Zero</a><a class="wk" data-g="onegs" href="#w-any2any">Any2Any</a><a class="wk" data-g="real" href="#w-resmimic">ResMimic</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-a"><b>A</b>让通用控制器“换身体”</a><a class="tp" href="#t-f"><b>F</b>真机鲁棒性：湿滑、负载与跌倒</a></dd></div>
+  </dl>
+</div>
+<div class="need" id="need-6">
+  <div class="thumb"><svg viewBox="960 0 240 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene" width="1200" height="560"/></svg><span class="pin">6</span></div>
+  <div><h3>异常时远程接管</h3><p class="desc">遇到自主处理不了的情况，由值班人员戴 VR 或动捕服远程接管，同时把这段操作录成训练数据。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>全身遥操作、设备适配、数据闭环</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="real" href="#w-mosaic">MOSAIC</a><a class="wk" data-g="real" href="#w-twist2">TWIST2</a><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-d"><b>D</b>遥操作接管与数据闭环</a></dd></div>
+  </dl>
+</div><p class="need-split">研发侧还有两件事</p>
+<div class="need" id="need-7">
+  <div class="thumb"><svg viewBox="0 0 240 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M0 162 H240" class="sc-floor-edge"/><g class="robot " transform="translate(48.0 113.5) scale(0.4) translate(-48.0 -113.5)"><path d="M44.0 36.5 L52.7 85.7 L68.4 129.0" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="68.4" cy="129.0" r="6" class="rb-far-fill"/><path d="M48.0 113.5 L39.4 174.9 L34.1 234.7" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M34.1 234.7 L56.1 234.7" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(48.0 63.9) rotate(0.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(48.0 113.5) rotate(0.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(48.0 19.5) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M48.0 113.5 L56.6 174.9 L60.8 234.8" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M60.8 234.8 L82.8 234.8" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M48.0 33.5 L41.0 83.0 L45.8 128.8" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="45.8" cy="128.8" r="6" class="rb-near-fill"/></g><g class="robot " transform="translate(120.0 101.4) scale(0.5) translate(-120.0 -101.4)"><path d="M116.0 24.4 L124.7 73.6 L140.4 116.8" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="140.4" cy="116.8" r="6" class="rb-far-fill"/><path d="M120.0 101.4 L111.4 162.8 L106.1 222.5" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M106.1 222.5 L128.1 222.5" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(120.0 51.8) rotate(0.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(120.0 101.4) rotate(0.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(120.0 7.4) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M120.0 101.4 L128.6 162.8 L132.8 222.6" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M132.8 222.6 L154.8 222.6" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M120.0 21.4 L113.0 70.9 L117.8 116.6" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="117.8" cy="116.6" r="6" class="rb-near-fill"/></g><g class="robot " transform="translate(194.0 91.7) scale(0.58) translate(-194.0 -91.7)"><path d="M190.0 14.7 L198.7 63.9 L214.4 107.1" class="rb-far" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="214.4" cy="107.1" r="6" class="rb-far-fill"/><path d="M194.0 91.7 L185.4 153.1 L180.1 212.8" class="rb-far" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M180.1 212.8 L202.1 212.8" class="rb-far" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(194.0 42.1) rotate(0.0)"><rect x="-50" y="-30" width="30" height="54" rx="7" class="rb-pack"/><rect x="-45" y="-22" width="20" height="5" rx="2" class="rb-pack-line"/><circle cx="-35" cy="13" r="3.2" class="rb-led"/><path d="M-44 -30 L-48 -46" class="rb-ant" stroke-width="2.4" stroke-linecap="round"/></g><g transform="translate(194.0 91.7) rotate(0.0)"><rect x="-21" y="-86" width="42" height="76" rx="13" class="rb-body"/><path d="M-10 -64 L12 -64" class="rb-trim" stroke-width="2.4" stroke-linecap="round"/><rect x="-17" y="-16" width="34" height="24" rx="9" class="rb-body"/></g><g transform="translate(194.0 -2.3) rotate(0.0)"><rect x="-6" y="-4" width="12" height="10" rx="3" class="rb-body"/><rect x="-19" y="-38" width="40" height="36" rx="12" class="rb-body"/><rect x="2" y="-30" width="21" height="13" rx="6" class="rb-visor"/></g><path d="M194.0 91.7 L202.6 153.1 L206.8 212.9" class="rb-near" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M206.8 212.9 L228.8 212.9" class="rb-near" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M194.0 11.7 L187.0 61.2 L191.8 106.9" class="rb-near" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="191.8" cy="106.9" r="6" class="rb-near-fill"/></g></svg><span class="pin">7</span></div>
+  <div><h3>本体换代、多个型号</h3><p class="desc">巡检本体会迭代，也会有多个型号，不能每换一次就从头训练一遍。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>跨本体迁移、通用重定向</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-any2any">Any2Any</a><a class="wk" data-g="data" href="#w-gmr">GMR</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-a"><b>A</b>让通用控制器“换身体”</a></dd></div>
+  </dl>
+</div>
+<div class="need" id="need-8">
+  <div class="thumb"><svg viewBox="0 0 240 180" aria-hidden="true"><rect x="20" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="40" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="50" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="60" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="70" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="80" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="90" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="100" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="20" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="33" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="46" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="59" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="72" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="85" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="98" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="111" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="124" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="137" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="150" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="163" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="176" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="189" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="202" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="215" y="110" width="10" height="7" rx="1.5" class="gpu-cell"/><rect x="96" y="134" width="30" height="20" rx="3" class="gpu-one"/><text x="20" y="30" class="dia-t">128 卡 × 7 天</text><text x="134" y="149" class="dia-t ink">单卡</text></svg><span class="pin">8</span></div>
+  <div><h3>新技能要训得快</h3><p class="desc">现场需求常变，新动作、新任务要能在实验室的算力下快速训出来、快速验证。</p></div>
+  <dl>
+    <div><dt>需要的能力</dt><dd>高效训练、快速迭代</dd></div>
+    <div><dt>可以参考</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-supermimic">SuperMimic</a><a class="wk" data-g="tool" href="#w-mjlab">mjlab</a></dd></div>
+    <div><dt>对应课题</dt><dd class="chips"><a class="tp" href="#t-b"><b>B</b>单卡也能训的世界模型跟踪器</a></dd></div>
+  </dl>
+</div></div>
+</section>
+
+<section class="station wrap" id="s4" aria-labelledby="s4-h">
+  <div class="st-head"><span class="st-no" aria-hidden="true">4</span><h2 id="s4-h">6 个可选课题</h2><p>每个课题都写了要回答的问题、先读哪几篇、第一个月能做什么。难度只是相对参考，可以按兴趣调整。</p></div>
+  <div class="chooser"><p>你更喜欢做哪类事？点一下，适合的课题会留下来。</p>
+    <div class="choices"><button type="button" class="choice" data-tag="algo" aria-pressed="false">推公式、改算法</button><button type="button" class="choice" data-tag="robot" aria-pressed="false">调真机、跑实验</button><button type="button" class="choice" data-tag="data" aria-pressed="false">做数据、建基准</button><button type="button" class="choice" data-tag="sys" aria-pressed="false">搭系统、做工具</button></div><p id="choice-out" aria-live="polite"></p></div>
+  <div class="topics">
+<article class="topic" id="t-a" data-tags="algo robot" data-letter="A">
+  <div class="t-head"><span class="t-letter" aria-hidden="true">A</span>
+    <h3>让通用控制器“换身体”</h3>
+    <span class="lvl"><i aria-hidden="true"><span class="on"></span><span class="on"></span><span class=""></span></i>难度：进阶</span>
+    <p class="sub">巡检本体迁移与负载适配</p></div>
+  <div class="t-body">
+    <p class="one">把 SONIC 这类在 G1 上训好的通用跟踪器，低成本迁移到巡检用的人形本体上，并适应背负设备带来的质量和重心变化。</p>
+    <p class="fit">适合喜欢：推公式、改算法、调真机、跑实验</p>
+    <dl>
+      <div><dt>要回答的问题</dt><dd>不同关节构型怎么对齐？负载变化以后，哪些模块需要适配，能不能在线自适应？</dd></div>
+      <div><dt>先读</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a><a class="wk" data-g="onegs" href="#w-any2any">Any2Any</a><a class="wk" data-g="data" href="#w-gmr">GMR</a><a class="wk" data-g="base" href="#w-bfm-zero">BFM-Zero</a></dd></div>
+      <div><dt>第一个月可以做</dt><dd><ol><li>跑通 Any2Any 开源代码，复现 SONIC 迁移到新本体的仿真流程</li><li>在仿真里给机器人背上不同重量的负载，看跟踪性能怎么变差</li><li>对比 LoRA 适配和全参数微调的效果与代价</li></ol></dd></div>
+      <div><dt>可能的产出</dt><dd>负载和本体感知的迁移方法，以及真机行走、下蹲、跪地的前后对比。</dd></div>
+    </dl>
+  </div>
+</article>
+<article class="topic" id="t-b" data-tags="algo" data-letter="B">
+  <div class="t-head"><span class="t-letter" aria-hidden="true">B</span>
+    <h3>单卡也能训的世界模型跟踪器</h3>
+    <span class="lvl"><i aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span></i>难度：挑战</span>
+    <p class="sub">沿 SuperMimic 的路线往下走</p></div>
+  <div class="t-body">
+    <p class="one">用可微世界模型替代大部分仿真采样，让实验室单卡就能训练、迭代巡检要用的新技能。</p>
+    <p class="fit">适合喜欢：推公式、改算法</p>
+    <dl>
+      <div><dt>要回答的问题</dt><dd>遇到接触和摩擦突变（比如湿滑地面）时，世界模型的误差怎么控制？地形、负载能不能作为条件放进世界模型？</dd></div>
+      <div><dt>先读</dt><dd class="chips"><a class="wk" data-g="onegs" href="#w-supermimic">SuperMimic</a><a class="wk" data-g="base" href="#w-beyondmimic">BeyondMimic</a><a class="wk" data-g="tool" href="#w-mjlab">mjlab</a><a class="wk" data-g="base" href="#w-humanoid-gpt">Humanoid-GPT</a></dd></div>
+      <div><dt>第一个月可以做</dt><dd><ol><li>在 mjlab 里跑通 G1 运动模仿，熟悉 MuJoCo Warp</li><li>试玩 SuperMimic 网页 demo，精读方法和算力对比</li><li>在一个小动作集上，实现“世界模型 + 短时域反传”的最小版本</li></ol></dd></div>
+      <div><dt>可能的产出</dt><dd>训练效率明显提升的方法论文，以及单卡训出的巡检动作策略。</dd></div>
+    </dl>
+  </div>
+</article>
+<article class="topic" id="t-c" data-tags="data" data-letter="C">
+  <div class="t-head"><span class="t-letter" aria-hidden="true">C</span>
+    <h3>巡检动作库与重定向数据引擎</h3>
+    <span class="lvl"><i aria-hidden="true"><span class="on"></span><span class=""></span><span class=""></span></i>难度：入门</span>
+    <p class="sub">把巡检动作变成可复用的数据</p></div>
+  <div class="t-body">
+    <p class="one">系统整理巡检常用动作，从动捕和视频里采集，用 GMR、OmniRetarget 重定向到自家本体，做成可复用的数据集和评测基准。</p>
+    <p class="fit">适合喜欢：做数据、建基准</p>
+    <dl>
+      <div><dt>要回答的问题</dt><dd>怎么评价重定向的质量？手扶柜门、脚踩台阶这类带接触的动作，怎么保住接触关系？</dd></div>
+      <div><dt>先读</dt><dd class="chips"><a class="wk" data-g="data" href="#w-gmr">GMR</a><a class="wk" data-g="data" href="#w-omniretarget">OmniRetarget</a><a class="wk" data-g="base" href="#w-humanoid-gpt">Humanoid-GPT</a></dd></div>
+      <div><dt>第一个月可以做</dt><dd><ol><li>用 GMR 把 LAFAN1 里的动作重定向到 G1</li><li>录 10 段巡检动作（下蹲读表、跪姿检查、侧身通过等），动捕或单目视频都可以</li><li>用跟踪策略检验每段数据能不能做出来，整理失败原因</li></ol></dd></div>
+      <div><dt>可能的产出</dt><dd>巡检动作数据集与评测基准，适合写数据类论文。</dd></div>
+    </dl>
+  </div>
+</article>
+<article class="topic" id="t-d" data-tags="sys robot data" data-letter="D">
+  <div class="t-head"><span class="t-letter" aria-hidden="true">D</span>
+    <h3>遥操作接管与数据闭环</h3>
+    <span class="lvl"><i aria-hidden="true"><span class="on"></span><span class=""></span><span class=""></span></i>难度：入门</span>
+    <p class="sub">人兜底，机器人越用越会</p></div>
+  <div class="t-body">
+    <p class="one">现场遇到异常时，由人戴 VR 或动捕服远程接管；接管的过程同时变成训练数据。</p>
+    <p class="fit">适合喜欢：搭系统、做工具、调真机、跑实验、做数据、建基准</p>
+    <dl>
+      <div><dt>要回答的问题</dt><dd>不同遥操作设备的误差怎么快速适配？有延迟时全身怎么保持稳定？接管数据怎么用来训练自主策略？</dd></div>
+      <div><dt>先读</dt><dd class="chips"><a class="wk" data-g="real" href="#w-mosaic">MOSAIC</a><a class="wk" data-g="real" href="#w-twist2">TWIST2</a><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a></dd></div>
+      <div><dt>第一个月可以做</dt><dd><ol><li>跑通 MOSAIC 开源的跟踪模型和 PICO 适配器</li><li>搭一套 VR 全身遥操作链路，测端到端延迟</li><li>采 20 条巡检示范，比如蹲下查看、开柜门</li></ol></dd></div>
+      <div><dt>可能的产出</dt><dd>一套能用的接管系统和示范数据集，偏系统类论文。</dd></div>
+    </dl>
+  </div>
+</article>
+<article class="topic" id="t-e" data-tags="algo robot" data-letter="E">
+  <div class="t-head"><span class="t-letter" aria-hidden="true">E</span>
+    <h3>巡检中的全身移动操作</h3>
+    <span class="lvl"><i aria-hidden="true"><span class="on"></span><span class="on"></span><span class=""></span></i>难度：进阶</span>
+    <p class="sub">开柜门、拧阀门、搬工具箱</p></div>
+  <div class="t-body">
+    <p class="one">在通用跟踪器之上学残差策略，完成开柜门、按按钮、拧阀门、搬工具箱这类要“对准物体、用对力气”的动作。</p>
+    <p class="fit">适合喜欢：推公式、改算法、调真机、跑实验</p>
+    <dl>
+      <div><dt>要回答的问题</dt><dd>怎么加入物体感知和接触，又不破坏原有的通用动作能力？多个动作怎么串成一个完整任务？</dd></div>
+      <div><dt>先读</dt><dd class="chips"><a class="wk" data-g="real" href="#w-resmimic">ResMimic</a><a class="wk" data-g="data" href="#w-omniretarget">OmniRetarget</a><a class="wk" data-g="base" href="#w-beyondmimic">BeyondMimic</a><a class="wk" data-g="onegs" href="#w-sonic">SONIC</a></dd></div>
+      <div><dt>第一个月可以做</dt><dd><ol><li>复现 ResMimic 的一个搬箱任务</li><li>在仿真里搭一个带柜门和把手的环境</li><li>设计接触奖励，做出“走近、抓把手、开门”的最小原型</li></ol></dd></div>
+      <div><dt>可能的产出</dt><dd>巡检操作技能库，方法论文加真机演示。</dd></div>
+    </dl>
+  </div>
+</article>
+<article class="topic" id="t-f" data-tags="robot algo" data-letter="F">
+  <div class="t-head"><span class="t-letter" aria-hidden="true">F</span>
+    <h3>真机鲁棒性：湿滑、负载与跌倒</h3>
+    <span class="lvl"><i aria-hidden="true"><span class="on"></span><span class="on"></span><span class=""></span></i>难度：进阶</span>
+    <p class="sub">让机器人在现场扛得住意外</p></div>
+  <div class="t-body">
+    <p class="one">围绕巡检现场最常见的意外，比如湿滑地面、负载变化、被碰撞、摔倒后起身，研究仿真到真机的对齐和恢复能力。</p>
+    <p class="fit">适合喜欢：调真机、跑实验、推公式、改算法</p>
+    <dl>
+      <div><dt>要回答的问题</dt><dd>怎样用最少的真机数据修正仿真？摔倒后能不能自然起身，继续完成任务？</dd></div>
+      <div><dt>先读</dt><dd class="chips"><a class="wk" data-g="real" href="#w-asap">ASAP</a><a class="wk" data-g="base" href="#w-bfm-zero">BFM-Zero</a><a class="wk" data-g="onegs" href="#w-supermimic">SuperMimic</a><a class="wk" data-g="real" href="#w-mosaic">MOSAIC</a></dd></div>
+      <div><dt>第一个月可以做</dt><dd><ol><li>复现 ASAP 的 delta 动作模型流程（代码已开源）</li><li>设计一套巡检扰动测试：湿滑、推搡、负载</li><li>在仿真里量化现有跟踪器的失败模式，挑一个突破口</li></ol></dd></div>
+      <div><dt>可能的产出</dt><dd>鲁棒性评测基准和改进方法，以及真机长时间运行的数据。</dd></div>
+    </dl>
+  </div>
+</article></div>
+  <p class="onegs-note">这些课题都可以结合 ONE-G 的巡检场景与机器人平台开展，具体安排以双方沟通为准。</p>
+</section>
+
+<section class="station wrap" id="s5" aria-labelledby="s5-h">
+  <div class="st-head"><span class="st-no" aria-hidden="true">5</span><h2 id="s5-h">第一个月怎么上手</h2><p>不管最后选哪个课题，前四周都可以走同一条路：先跑通，再动手做数据，然后带着问题定方向。</p></div>
+  <ol class="weeks"><li class="week"><span class="w" aria-label="第 1 周">W1</span><h3>看懂基本盘</h3><p>读 SONIC 和 BeyondMimic；在 mjlab 里跑通 G1 运动模仿；试玩 SuperMimic 的网页 demo。</p></li><li class="week"><span class="w" aria-label="第 2 周">W2</span><h3>动手做数据</h3><p>用 GMR 把 LAFAN1 的动作重定向到 G1；再录一段自己的“下蹲读表”，从视频提取动作后重定向。</p></li><li class="week"><span class="w" aria-label="第 3 周">W3</span><h3>训练与评测</h3><p>在 mjlab 里训练这段动作的跟踪策略，再放到 MuJoCo 里做 sim2sim，记录失败案例；读 ASAP 和 MOSAIC。</p></li><li class="week"><span class="w" aria-label="第 4 周">W4</span><h3>定课题</h3><p>按兴趣精读对应课题的 2–3 篇论文，写一页开题设想：要解决什么问题、方法思路、在巡检场景里怎么验证。</p></li></ol>
+  <h3 class="sub-h">资源</h3>
+  <div class="res"><div><h4>先跑起来</h4><ul><li><a href="https://mujocolab.github.io/mjlab/" target="_blank" rel="noopener">mjlab 文档</a></li><li><a href="https://supermimic.github.io/demo/" target="_blank" rel="noopener">SuperMimic 网页 demo</a></li><li><a href="https://github.com/YanjieZe/GMR" target="_blank" rel="noopener">GMR 重定向工具</a></li></ul><p class="tip">一行命令试跑：<code>uvx --from mjlab --refresh demo</code>。训练需要 NVIDIA GPU，macOS 只能做评估。</p></div><div><h4>开源数据</h4><ul><li><a href="https://twist-data.github.io/" target="_blank" rel="noopener">TWIST2 遥操作数据</a></li><li><a href="https://huggingface.co/datasets/BAAI-Humanoid/MOSAIC_Dataset" target="_blank" rel="noopener">MOSAIC 数据集</a></li><li><a href="https://huggingface.co/datasets/omniretarget/OmniRetarget_Dataset" target="_blank" rel="noopener">OmniRetarget 数据集</a></li></ul></div><div><h4>开源代码</h4><ul><li><a href="https://github.com/NVlabs/GR00T-WholeBodyControl" target="_blank" rel="noopener">SONIC（GR00T-WholeBodyControl）</a></li><li><a href="https://github.com/HybridRobotics/whole_body_tracking" target="_blank" rel="noopener">BeyondMimic</a></li><li><a href="https://github.com/Ming827/any2any_sonic2Oli" target="_blank" rel="noopener">Any2Any</a></li><li><a href="https://github.com/LeCAR-Lab/BFM-Zero" target="_blank" rel="noopener">BFM-Zero</a></li><li><a href="https://github.com/LeCAR-Lab/ASAP" target="_blank" rel="noopener">ASAP</a></li><li><a href="https://github.com/BAAI-Humanoid/MOSAIC" target="_blank" rel="noopener">MOSAIC</a></li><li><a href="https://github.com/amazon-far/TWIST2" target="_blank" rel="noopener">TWIST2</a></li><li><a href="https://github.com/amazon-far/ResMimic" target="_blank" rel="noopener">ResMimic</a></li><li><a href="https://github.com/GalaxyGeneralRobotics/Humanoid-GPT" target="_blank" rel="noopener">Humanoid-GPT</a></li></ul></div></div>
+  <h3 class="sub-h">术语表</h3>
+  
+  <dl class="gloss"><div><dt>全身运控（WBC）</dt><dd>同时协调腿、躯干和手臂，让机器人既保持平衡、又完成动作。</dd></div><div><dt>运动跟踪</dt><dd>给定一段参考动作，策略输出关节指令，让机器人尽量跟着做出来。</dd></div><div><dt>重定向</dt><dd>把人体动作转换成机器人关节能执行的动作。</dd></div><div><dt>强化学习（RL）</dt><dd>在仿真里不断试错，根据奖励改进策略。</dd></div><div><dt>sim2real</dt><dd>把仿真里训好的策略部署到真机，并缩小两者之间的差距。</dd></div><div><dt>跨本体迁移</dt><dd>把一台机器人上训好的策略，用到另一台结构不同的机器人上。</dd></div><div><dt>世界模型</dt><dd>学一个预测“下一刻会怎样”的模型，可以在里面“想象”着练习。</dd></div><div><dt>残差学习</dt><dd>在已有策略的输出上，再学一个小的修正量。</dd></div><div><dt>LoRA</dt><dd>只训练少量低秩参数来适配新任务的微调方法，原模型基本不动。</dd></div><div><dt>VLA</dt><dd>视觉-语言-动作模型：看图、听指令，然后输出动作。</dd></div><div><dt>遥操作</dt><dd>人通过 VR、动捕服等设备实时操控机器人。</dd></div><div><dt>行为基础模型（BFM）</dt><dd>预训练好的通用行为策略，可以用不同方式“提示”它完成不同任务。</dd></div></dl>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <h2>论文来源</h2><ol class="src"><li><a href="https://arxiv.org/abs/2511.07820" target="_blank" rel="noopener">SONIC</a>：NVIDIA，Science Robotics</li><li><a href="https://arxiv.org/abs/2605.23733" target="_blank" rel="noopener">Any2Any</a>：逐际动力 LimX Dynamics，arXiv 2026</li><li><a href="https://arxiv.org/abs/2610.28480" target="_blank" rel="noopener">SuperMimic</a>：UC Berkeley，CoRL 2026</li><li><a href="https://arxiv.org/abs/2508.08241" target="_blank" rel="noopener">BeyondMimic</a>：UC Berkeley、Stanford，Science Robotics 2026</li><li><a href="https://arxiv.org/abs/2606.03985" target="_blank" rel="noopener">Humanoid-GPT</a>：清华、银河通用、北航等，CVPR 2026</li><li><a href="https://arxiv.org/abs/2511.04131" target="_blank" rel="noopener">BFM-Zero</a>：CMU、Meta，ICLR 2026</li><li><a href="https://arxiv.org/abs/2510.02252" target="_blank" rel="noopener">GMR</a>：Stanford，ICRA 2026</li><li><a href="https://arxiv.org/abs/2509.26633" target="_blank" rel="noopener">OmniRetarget</a>：Amazon FAR、MIT、UC Berkeley 等，ICRA 2026 最佳论文</li><li><a href="https://arxiv.org/abs/2502.01143" target="_blank" rel="noopener">ASAP</a>：CMU 等，RSS 2025</li><li><a href="https://arxiv.org/abs/2602.08594" target="_blank" rel="noopener">MOSAIC</a>：智源研究院 BAAI 等，arXiv 2026</li><li><a href="https://arxiv.org/abs/2511.02832" target="_blank" rel="noopener">TWIST2</a>：Amazon FAR、Stanford 等，ICRA 2026</li><li><a href="https://arxiv.org/abs/2510.05070" target="_blank" rel="noopener">ResMimic</a>：Amazon FAR 等，arXiv 2025</li><li><a href="https://arxiv.org/abs/2601.22074" target="_blank" rel="noopener">mjlab</a>：UC Berkeley 等，arXiv 2026</li></ol>
+  <p>页面里的视频都直接嵌入自各论文的官方项目页，版权归原作者所有。文字由 ONE-G（万机）整理，难免有疏漏，请以原论文为准。</p>
+</div></footer>
+<script>
+(() => {
+  const L = {"out": "更适合你的课题：{list}（其余已变淡，再点一次恢复）", "sep": "、"};
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // language switch keeps the section you are reading
+  $$('.lang a').forEach(a => a.addEventListener('click', () => { a.href = a.getAttribute('href').split('#')[0] + location.hash; }));
+
+  // videos: show a first frame when near the viewport, play only on request
+  function prime(fig) {
+    const v = $('video', fig);
+    if (!v || v.dataset.primed) return;
+    v.dataset.primed = '1';
+    load(v, $('.clip[aria-selected="true"]', fig) || $('.clip', fig), false);
+  }
+  function load(v, tab, play) {
+    const fig = v.closest('.media');
+    fig.classList.remove('is-error');
+    v.poster = tab.dataset.poster || '';
+    v.preload = play ? 'auto' : 'metadata';
+    v.src = tab.dataset.src + (play ? '' : '#t=0.1');
+    $('.fail a', fig).href = tab.dataset.page;
+    if (play) start(v);
+  }
+  function start(v) {
+    v.closest('.media').classList.add('is-playing');
+    v.controls = true;
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+  const io = 'IntersectionObserver' in window
+    ? new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { prime(en.target); io.unobserve(en.target); } }), { rootMargin: '300px 0px' })
+    : null;
+  $$('.media').forEach(fig => {
+    const v = $('video', fig);
+    if (!v) return;
+    io ? io.observe(fig) : prime(fig);
+    $('.play', fig).addEventListener('click', () => { prime(fig); start(v); });
+    $$('.clip', fig).forEach(b => b.addEventListener('click', () => {
+      $$('.clip', fig).forEach(x => x.setAttribute('aria-selected', String(x === b)));
+      v.dataset.primed = '1';
+      load(v, b, true);
+    }));
+    v.addEventListener('error', () => { fig.classList.add('is-error'); fig.classList.remove('is-playing'); });
+  });
+
+  // work filters
+  const filters = $$('.filter');
+  function setFilter(g) {
+    filters.forEach(x => x.setAttribute('aria-pressed', String(x.dataset.g === g)));
+    $$('.work').forEach(c => { c.hidden = !(g === 'all' || c.dataset.g === g); });
+  }
+  filters.forEach(b => b.addEventListener('click', () => setFilter(b.dataset.g)));
+
+  // any link to a work card: reveal it, scroll to it, flash once
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest('a[href^="#w-"]');
+    if (!a) return;
+    const card = document.getElementById(a.getAttribute('href').slice(1));
+    if (!card) return;
+    ev.preventDefault();
+    if (card.hidden) setFilter('all');
+    card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
+    history.replaceState(null, '', '#' + card.id);
+  });
+
+  // topic chooser
+  const out = $('#choice-out');
+  $$('.choice').forEach(b => b.addEventListener('click', () => {
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    $$('.choice').forEach(x => x.setAttribute('aria-pressed', 'false'));
+    b.setAttribute('aria-pressed', String(on));
+    const tag = on ? b.dataset.tag : null;
+    const hits = [];
+    $$('.topic').forEach(tp => {
+      const hit = !tag || tp.dataset.tags.split(' ').includes(tag);
+      tp.classList.toggle('dim', !hit);
+      if (tag && hit) hits.push(tp.dataset.letter);
+    });
+    out.textContent = tag ? L.out.replace('{list}', hits.join(L.sep)) : '';
+  }));
+
+  // highlight the current stop in the top bar
+  const links = $$('.nav a');
+  if ('IntersectionObserver' in window) {
+    const spy = new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.hash === '#' + en.target.id));
+    }), { rootMargin: '-40% 0px -55% 0px' });
+    links.forEach(a => { const s = document.querySelector(a.hash); if (s) spy.observe(s); });
+    const hero = document.getElementById('top');
+    if (hero) new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(a => a.classList.remove('on')); }), { rootMargin: '-40% 0px -55% 0px' }).observe(hero);
+  }
+})();
+</script>
+</body>
+</html>

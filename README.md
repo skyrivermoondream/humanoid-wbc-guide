@@ -1,27 +1,28 @@
-# 人形机器人全身运控：研究生课题地图
+# Humanoid Whole-Body Control: A Topic Map for Graduate Students
 
-在线阅读：https://skyrivermoondream.github.io/humanoid-wbc-guide/
+English: https://skyrivermoondream.github.io/humanoid-wbc-guide/
+中文版：https://skyrivermoondream.github.io/humanoid-wbc-guide/zh/
 
-写给联合培养的研究生同学的一页式导读：
+A one-page guide for graduate students co-supervised with ONE-G:
 
-1. 五分钟看懂人形全身运控的六站流水线
-2. 13 个前沿工作（SONIC、Any2Any、SuperMimic 等）的视频、通俗讲解和与巡检的关系
-3. 巡检现场的 8 类需求，对到能力、参考工作和课题
-4. 6 个可选课题，含难度、先读论文和第一个月的上手任务
-5. 第一个月的上手路线、资源和术语表
+1. The humanoid whole-body control pipeline in five minutes
+2. 13 recent works (SONIC, Any2Any, SuperMimic and more) with videos, plain-language notes and why each matters for inspection
+3. Eight needs on an inspection route, matched to abilities, works and topics
+4. Six candidate topics with difficulty, reading list and month-one tasks
+5. A first-month plan, resources and a glossary
 
-页面是单个静态 `index.html`，不依赖外部字体和脚本库。视频直接嵌入各论文官方项目页，点击播放时才加载，版权归原作者所有。
+Each language is a single static HTML file with no external fonts or script libraries. Videos are embedded from each paper's official project page, load only when played, and belong to their authors.
 
-## 修改内容
+## Editing
 
-文字和链接都在 `src/content.py`，插图在 `src/scene.py`，改完后在仓库根目录运行：
+All text and links live in `src/content.py`. Every string is written as `T("English", "中文")`, so edit both languages together. The illustration is in `src/scene.py`. After editing, run this from the repository root:
 
 ```bash
 python3 src/build.py
 ```
 
-会重新生成 `index.html`。只需要 Python 3，无需安装其他依赖。
+It regenerates `index.html` (English, the default) and `zh/index.html` (Chinese). Only Python 3 is needed.
 
-网站目前从 `gh-pages` 分支发布。改完提交到 `main` 后，再运行 `git push origin main:gh-pages` 同步一下；也可以在仓库 Settings → Pages 里把发布分支改成 `main`，以后只推 `main` 就行。
+The site is published from the `gh-pages` branch. After committing to `main`, run `git push origin main:gh-pages`, or switch the Pages source to `main` under Settings → Pages.
 
-ONE-G（万机）整理，信息截至 2026 年 10 月。
+Compiled by ONE-G (万机). Current as of October 2026.
