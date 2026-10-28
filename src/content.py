@@ -685,9 +685,11 @@ UI = dict(
               "13 个前沿工作、巡检场景需求、6 个可选课题和第一个月上手路线。"),
     brand=T("Humanoid WBC", "人形全身运控"),
     brand_sub=T("Topic map", "课题地图"),
-    nav=[T("Basics", "看懂"), T("Papers", "论文"), T("Scenario", "场景"), T("Topics", "课题"), T("Start", "上手")],
+    nav=[T("Basics", "看懂"), T("Papers", "论文"), T("Route", "场景"), T("Topics", "课题"), T("Start", "上手")],
     nav_label=T("Page sections", "页面导航"),
     lang_label=T("Language", "语言"),
+    to_dark=T("Switch to dark mode", "切换到深色模式"),
+    to_light=T("Switch to light mode", "切换到浅色模式"),
     h1=T("Humanoid Whole-Body Control", "人形机器人全身运控"),
     h1_sub=T("A topic map for graduate students", "研究生课题地图"),
     lede=T("For graduate students co-supervised with ONE-G. Get the big picture in five minutes, watch 13 recent "

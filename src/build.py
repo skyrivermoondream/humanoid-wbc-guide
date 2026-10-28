@@ -27,6 +27,19 @@ def u(key, **kw):
     return s.format(**kw) if kw else s
 
 
+DARK = """
+  --bg:#12151A;--surface:#191C22;--surface-2:#20252D;
+  --ink:#E8EDF4;--ink-2:#C5CEDA;--muted:#A0ABBA;--line:#2E3642;--line-strong:#4B5667;
+  --blue:#8AB2FF;--blue-ink:#D0DFFF;--blue-pale:#1E2A3E;--blue-soft:#435D88;--on-blue:#0B1426;
+  --teal:#70C3C5;--teal-ink:#C3EBEC;--teal-pale:#17302F;--on-teal:#08201F;
+  --screen:#0A0E14;
+  --wall:#1A1F27;--seam:#252C36;--ceiling:#3B4553;--tray:#4C5767;--floor:#21272F;--floor-edge:#7B8799;--lane:#34404F;
+  --steel:#5C6878;--steel-dark:#8692A3;--steel-light:#36404C;--pipe:#515D6C;
+  --cab:#2A323D;--cab-door:#333C48;--water:#294462;
+  --robot:#D2DAE5;--robot-far:#5A6677;--visor:#3AA7AC;--pack:#6E9BFF;--pack-led:#E8F7F7;
+  --warn:#E3A537;--needle:#FF7A62;--glint:.3;
+"""
+
 CSS = r"""
 :root{
   --bg:#F7F9FC;--surface:#FFFFFF;--surface-2:#F0F4F9;
@@ -38,22 +51,14 @@ CSS = r"""
   --steel:#98A4B3;--steel-dark:#69768A;--steel-light:#C7D0DB;--pipe:#8592A3;
   --cab:#C5CED9;--cab-door:#D8DFE8;--water:#CCDEF2;
   --robot:#25334A;--robot-far:#A1ADBD;--visor:#6FD0D3;--pack:#245BDF;--pack-led:#CFF3F3;
-  --warn:#EFB13C;--needle:#E0533D;--led-g:#2FB27A;--led-r:#E0533D;
+  --warn:#EFB13C;--needle:#E0533D;--led-g:#2FB27A;--led-r:#E0533D;--glint:.85;
   --din:"DIN Alternate","Bahnschrift","Barlow Semi Condensed","Roboto Condensed","sans-serif-condensed","Arial Narrow",var(--font);
   color-scheme:light dark;
 }
-@media (prefers-color-scheme:dark){:root{
-  --bg:#12151A;--surface:#191C22;--surface-2:#20252D;
-  --ink:#E8EDF4;--ink-2:#C5CEDA;--muted:#A0ABBA;--line:#2E3642;--line-strong:#4B5667;
-  --blue:#8AB2FF;--blue-ink:#D0DFFF;--blue-pale:#1E2A3E;--blue-soft:#435D88;--on-blue:#0B1426;
-  --teal:#70C3C5;--teal-ink:#C3EBEC;--teal-pale:#17302F;--on-teal:#08201F;
-  --screen:#0A0E14;
-  --wall:#1A1F27;--seam:#252C36;--ceiling:#3B4553;--tray:#4C5767;--floor:#21272F;--floor-edge:#7B8799;--lane:#34404F;
-  --steel:#5C6878;--steel-dark:#8692A3;--steel-light:#36404C;--pipe:#515D6C;
-  --cab:#2A323D;--cab-door:#333C48;--water:#294462;
-  --robot:#D2DAE5;--robot-far:#5A6677;--visor:#3AA7AC;--pack:#6E9BFF;--pack-led:#E8F7F7;
-  --warn:#E3A537;--needle:#FF7A62;
-}}
+/* dark tokens apply when the viewer picks dark, or when the system is dark and no choice was made */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;__DARK__}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;__DARK__}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:68px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -81,9 +86,17 @@ p{margin:0}
 .lang a,.lang span{display:block;padding:6px 9px;text-decoration:none;color:var(--blue-ink)}
 .lang span{background:var(--blue);color:var(--on-blue);font-weight:600}
 .lang a:hover{background:var(--surface)}
+.theme{flex:none;display:grid;place-items:center;width:32px;height:32px;padding:0;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.theme:hover{border-color:var(--blue-soft);color:var(--blue-ink)}
+.theme svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.theme .i-sun{display:none}
+:root[data-theme="dark"] .theme .i-sun{display:block}
+:root[data-theme="dark"] .theme .i-moon{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .theme .i-sun{display:block}:root:not([data-theme="light"]) .theme .i-moon{display:none}}
 @media (max-width:720px){.brand span{display:none}.bar .wrap{gap:10px}.nav a{padding:0 8px 2px}}
 @media (max-width:600px){.brand{display:none}.nav{margin-left:0;flex:1;justify-content:space-between}.nav a{padding:0 4px 2px;font-size:13.5px}.lang a,.lang span{padding:6px 8px}}
-@media (max-width:380px){.nav a{padding:0 2px 2px;font-size:13px}.lang a,.lang span{padding:6px 7px}}
+@media (max-width:420px){.bar .wrap{gap:8px}.nav a{padding:0 1px 2px;font-size:13px}.lang a,.lang span{padding:6px 7px}.theme{width:30px;height:30px}}
+@media (max-width:340px){.nav{display:none}.brand{display:block;margin-right:auto}}
 
 /* hero */
 .hero{padding-top:48px;padding-bottom:8px}
@@ -112,7 +125,7 @@ p{margin:0}
 .sc-wall{fill:var(--wall)}.sc-seam{stroke:var(--seam);stroke-width:1.5}
 .sc-ceiling{fill:var(--ceiling)}.sc-tray{fill:none;stroke:var(--tray);stroke-width:2.5}.sc-tray-rib{stroke:var(--tray);stroke-width:2}
 .sc-floor{fill:var(--floor)}.sc-floor-edge{stroke:var(--floor-edge);stroke-width:2}.sc-lane{stroke:var(--lane);stroke-width:3;stroke-dasharray:22 14}
-.sc-water{fill:var(--water)}.sc-water-glint{stroke:#fff;stroke-width:2.5;stroke-linecap:round;opacity:.85}
+.sc-water{fill:var(--water)}.sc-water-glint{stroke:#fff;stroke-width:2.5;stroke-linecap:round;opacity:var(--glint)}
 .sc-step{fill:var(--steel-light);stroke:var(--steel-dark);stroke-width:1.5}.sc-grate{stroke:var(--steel-dark);stroke-width:2}.sc-step-edge{stroke:var(--warn);stroke-width:3}
 .sc-hanger{stroke:var(--steel-dark);stroke-width:4}.sc-pipe{fill:var(--pipe)}.sc-pipe-0{fill:var(--steel)}.sc-pipe-2{fill:var(--steel-dark)}.sc-clamp{fill:var(--steel-dark)}
 .sc-hazard rect{fill:var(--warn)}.sc-hazard-stripe{stroke:#1B2230;stroke-width:3}
@@ -129,7 +142,6 @@ p{margin:0}
 .rb-near{stroke:var(--robot)}.rb-near-fill{fill:var(--robot)}.rb-far{stroke:var(--robot-far)}.rb-far-fill{fill:var(--robot-far)}
 .rb-body{fill:var(--robot)}.rb-trim{stroke:var(--visor)}.rb-visor{fill:var(--visor)}.rb-pack{fill:var(--pack)}
 .rb-pack-line{fill:#fff;opacity:.35}.rb-led{fill:var(--pack-led)}.rb-ant{stroke:var(--pack)}
-@media (prefers-color-scheme:dark){.sc-water-glint{opacity:.3}}
 .hero-route{fill:none;stroke:var(--teal);stroke-width:6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0}
 .sc-mark{cursor:pointer}
 .sc-mark circle{fill:var(--teal);stroke:var(--wall);stroke-width:4;transition:transform .15s}
@@ -341,6 +353,28 @@ JS = r"""
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // light / dark switch: follows the system until the viewer picks one; picking the
+  // system's own mode again goes back to following the system
+  const root = document.documentElement, tb = $('.theme'), KEY = 'humanoid-wbc-guide:theme';
+  const sysDark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || (sysDark.matches ? 'dark' : 'light');
+  const labelTheme = () => { const s = current() === 'dark' ? L.toLight : L.toDark; tb.setAttribute('aria-label', s); tb.title = s; };
+  if (tb) {
+    tb.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      if (next === (sysDark.matches ? 'dark' : 'light')) {
+        delete root.dataset.theme;
+        try { localStorage.removeItem(KEY); } catch (err) {}
+      } else {
+        root.dataset.theme = next;
+        try { localStorage.setItem(KEY, next); } catch (err) {}
+      }
+      labelTheme();
+    });
+    if (sysDark.addEventListener) sysDark.addEventListener('change', labelTheme);
+    labelTheme();
+  }
 
   // language switch keeps the section you are reading
   $$('.lang a').forEach(a => a.addEventListener('click', () => { a.href = a.getAttribute('href').split('#')[0] + location.hash; }));
@@ -731,14 +765,25 @@ def lang_switch():
     return '<div class="lang" role="group" aria-label="语言"><span aria-current="true">中</span><a href="../" hreflang="en" lang="en">EN</a></div>'
 
 
+MOON = '<svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>'
+SUN = ('<svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/>'
+       '<path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>')
+
+
+def theme_switch():
+    # the label is filled in by the script; this default covers the no-script case
+    return f'<button type="button" class="theme" aria-label="{e(u("to_dark"))}" title="{e(u("to_dark"))}">{MOON}{SUN}</button>'
+
+
 def page(lang):
     global LANG
     LANG = lang
     out, html_lang, path = LANGS[lang]
     f = FONTS[lang]
-    css = CSS.replace(":root{\n", f':root{{\n  --font:{f["font"]};--lh:{f["lh"]};--hls:{f["hls"]};\n', 1)
+    css = CSS.replace(":root{\n", f':root{{\n  --font:{f["font"]};--lh:{f["lh"]};--hls:{f["hls"]};\n', 1).replace("__DARK__", DARK.strip())
     nav = "".join(f'<a href="#s{i}">{e(t(x))}</a>' for i, x in enumerate(C.UI["nav"], 1))
-    i18n = json.dumps({"out": u("choice_out"), "sep": u("list_sep")}, ensure_ascii=False)
+    i18n = json.dumps({"out": u("choice_out"), "sep": u("list_sep"), "toLight": u("to_light"), "toDark": u("to_dark")},
+                      ensure_ascii=False)
     fav = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' "
            "fill='%23245BDF'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23fff'/%3E%3C/svg%3E")
     return f'''<!doctype html>
@@ -746,6 +791,7 @@ def page(lang):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{{var m=localStorage.getItem("humanoid-wbc-guide:theme");if(m==="light"||m==="dark")document.documentElement.dataset.theme=m}}catch(e){{}}</script>
 <title>{e(u("title"))}</title>
 <meta name="description" content="{e(u("desc"))}">
 <meta property="og:title" content="{e(u("title"))}">
@@ -760,7 +806,7 @@ def page(lang):
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>{S.scene_symbol()}</defs></svg>
-<div class="bar"><div class="wrap"><a class="brand" href="#top">{e(u("brand"))}<span>{e(u("brand_sub"))}</span></a><nav class="nav" aria-label="{e(u("nav_label"))}">{nav}</nav>{lang_switch()}</div></div>
+<div class="bar"><div class="wrap"><a class="brand" href="#top">{e(u("brand"))}<span>{e(u("brand_sub"))}</span></a><nav class="nav" aria-label="{e(u("nav_label"))}">{nav}</nav>{lang_switch()}{theme_switch()}</div></div>
 {hero()}
 <main>
 {primer()}
